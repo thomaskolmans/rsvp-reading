@@ -44,21 +44,31 @@ export async function parseEPUB(file) {
   const book = ePub(arrayBuffer)
 
   await book.ready
+  await book.loaded.spine
 
   let fullText = ''
 
-  // Iterate through all spine items (chapters)
-  const spine = book.spine
-  // @ts-ignore - epubjs types are incomplete
-  const spineItems = spine.items || spine.spineItems || []
+  // Get spine items - the API varies between versions
+  const spineItems = book.spine?.spineItems || book.spine?.items || []
 
-  for (const section of spineItems) {
+  for (const item of spineItems) {
     try {
-      const contents = await section.load(book.load.bind(book))
+      // Load the section content using the book's load method
+      const href = item.href || item.url
+      if (!href) continue
+
+      const contents = await book.load(href)
       if (contents) {
-        // Extract text from the HTML content
-        const doc = new DOMParser().parseFromString(contents, 'text/html')
-        const text = doc.body ? doc.body.textContent : ''
+        let text = ''
+        // contents can be a Document, string, or XML document
+        if (typeof contents === 'string') {
+          const doc = new DOMParser().parseFromString(contents, 'text/html')
+          text = doc.body?.textContent || ''
+        } else if (contents.body) {
+          text = contents.body.textContent || ''
+        } else if (contents.documentElement) {
+          text = contents.documentElement.textContent || ''
+        }
         fullText += text + ' '
       }
     } catch (e) {
