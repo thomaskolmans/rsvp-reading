@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="6" fill="#000"/>
+  <text x="16" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#ff4444">R</text>
+  <line x1="16" y1="2" x2="16" y2="8" stroke="#ff4444" stroke-width="2" stroke-linecap="round"/>
+  <line x1="16" y1="24" x2="16" y2="30" stroke="#ff4444" stroke-width="2" stroke-linecap="round"/>
+</svg>
