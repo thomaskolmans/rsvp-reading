@@ -288,10 +288,19 @@
     display: flex;
     gap: 0.75rem;
     margin-top: 1.25rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .wpm-presets::-webkit-scrollbar {
+    display: none;
   }
 
   .preset-btn {
     flex: 1;
+    min-width: fit-content;
     background: #1a1a1a;
     border: 1px solid #252525;
     color: #888;
