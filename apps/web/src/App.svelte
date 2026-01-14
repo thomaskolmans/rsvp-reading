@@ -4,22 +4,24 @@
     parseText as parseTextUtil,
     getWordDelay as getWordDelayUtil,
     formatTimeRemaining,
-    shouldPauseAtWord
-  } from './lib/rsvp-utils.js';
-  import { parseFile } from './lib/file-parsers.js';
-  import {
+    shouldPauseAtWord,
+    extractWordFrame,
+    parseFile,
     saveSession,
     loadSession,
     clearSession,
     hasSession,
-    getSessionSummary
-  } from './lib/progress-storage.js';
+    getSessionSummary,
+    isElectron,
+    onFileOpened,
+    onMenuCommand,
+    readFileFromPath
+  } from '@rsvp/core';
   import RSVPDisplay from './lib/components/RSVPDisplay.svelte';
   import Controls from './lib/components/Controls.svelte';
   import Settings from './lib/components/Settings.svelte';
   import TextInput from './lib/components/TextInput.svelte';
   import ProgressBar from './lib/components/ProgressBar.svelte';
-  import { extractWordFrame } from './lib/rsvp-utils.js';
 
   // State
   let frameWordCount = 1;
@@ -262,6 +264,94 @@
     progress = (currentWordIndex / words.length) * 100;
   }
 
+  // Electron: Handle file opened from Finder/dock
+  async function handleElectronFile(filePath) {
+    isLoadingFile = true;
+    loadingMessage = `Loading file...`;
+
+    try {
+      const file = await readFileFromPath(filePath);
+      if (file) {
+        text = await parseFile(file);
+        stop();
+        parseText();
+        showTextInput = false;
+        loadingMessage = '';
+      }
+    } catch (error) {
+      console.error('Error loading file:', error);
+      loadingMessage = `Error: ${error.message}`;
+      setTimeout(() => { loadingMessage = ''; }, 3000);
+    } finally {
+      isLoadingFile = false;
+    }
+  }
+
+  // Electron: Handle menu commands
+  function handleMenuCommandEvent(command) {
+    switch (command) {
+      case 'open':
+        showTextInput = true;
+        showSettings = false;
+        showJumpTo = false;
+        break;
+      case 'save':
+        saveCurrentSession();
+        break;
+      case 'preferences':
+        showSettings = true;
+        showTextInput = false;
+        showJumpTo = false;
+        break;
+      case 'toggle-play':
+        if (isPlaying) pause();
+        else if (isPaused) resume();
+        else start();
+        break;
+      case 'stop':
+        stop();
+        break;
+      case 'speed-up':
+        wordsPerMinute = Math.min(1000, wordsPerMinute + 25);
+        break;
+      case 'speed-down':
+        wordsPerMinute = Math.max(50, wordsPerMinute - 25);
+        break;
+      case 'jump-forward':
+        if (currentWordIndex < words.length) {
+          progress = ((currentWordIndex + 1) / words.length) * 100;
+          currentWordIndex++;
+        }
+        break;
+      case 'jump-backward':
+        if (currentWordIndex > 1) {
+          currentWordIndex = Math.max(0, currentWordIndex - 2);
+          progress = (currentWordIndex / words.length) * 100;
+        }
+        break;
+      case 'jump-to':
+        showJumpTo = !showJumpTo;
+        break;
+      case 'focus-mode':
+        // Toggle focus mode by starting/stopping
+        if (isFocusMode) {
+          isPlaying = false;
+          isPaused = false;
+          if (intervalId) {
+            clearTimeout(intervalId);
+            intervalId = null;
+          }
+        } else {
+          start();
+        }
+        break;
+      case 'show-shortcuts':
+        // Could show a help modal in the future
+        console.log('Shortcuts: Space=Play, ↑↓=Speed, ←→=Skip, G=Jump, Ctrl+S=Save');
+        break;
+    }
+  }
+
   function handleKeydown(e) {
     if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
 
@@ -328,6 +418,10 @@
     }
   }
 
+  // Electron IPC cleanup functions
+  let unsubscribeFileOpened = null;
+  let unsubscribeMenuCommand = null;
+
   onMount(() => {
     parseText();
     window.addEventListener('keydown', handleKeydown);
@@ -339,19 +433,32 @@
         showSavedSessionPrompt = true;
       }
     }
+
+    // Set up Electron IPC listeners
+    if (isElectron()) {
+      unsubscribeFileOpened = onFileOpened(handleElectronFile);
+      unsubscribeMenuCommand = onMenuCommand(handleMenuCommandEvent);
+    }
   });
 
   onDestroy(() => {
     if (intervalId) clearTimeout(intervalId);
     if (fadeTimeoutId) clearTimeout(fadeTimeoutId);
     window.removeEventListener('keydown', handleKeydown);
+
+    // Clean up Electron IPC listeners
+    if (unsubscribeFileOpened) unsubscribeFileOpened();
+    if (unsubscribeMenuCommand) unsubscribeMenuCommand();
   });
 </script>
 
 <main class:focus-mode={isFocusMode}>
+  <!-- Titlebar drag region for Electron (always visible for window dragging) -->
+  <div class="titlebar-drag-region"></div>
+
   <!-- Header - hidden during focus mode -->
   {#if !isFocusMode}
-    <header>
+    <header class="app-header">
       <h1>RSVP Reader</h1>
       <div class="header-actions">
         <button
@@ -868,5 +975,34 @@
   .icon-btn:disabled {
     opacity: 0.3;
     cursor: not-allowed;
+  }
+
+  /* Electron titlebar drag region for window movement */
+  .titlebar-drag-region {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 38px;
+    -webkit-app-region: drag;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* Header should also be draggable but buttons should not */
+  .app-header {
+    -webkit-app-region: drag;
+  }
+
+  .app-header h1 {
+    -webkit-app-region: drag;
+  }
+
+  .header-actions {
+    -webkit-app-region: no-drag;
+  }
+
+  .icon-btn {
+    -webkit-app-region: no-drag;
   }
 </style>

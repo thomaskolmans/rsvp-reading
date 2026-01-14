@@ -1,0 +1,20 @@
+{
+  "name": "@rsvp/web",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@rsvp/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^6.2.1",
+    "svelte": "^5.43.8",
+    "vite": "^7.2.4",
+    "vite-plugin-static-copy": "^3.1.4"
+  }
+}

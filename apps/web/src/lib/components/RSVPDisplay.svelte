@@ -1,5 +1,5 @@
 <script>
-  import { getActualORPIndex } from '../rsvp-utils.js';
+  import { getActualORPIndex } from '@rsvp/core';
 
   export let word = '';
   export let wordGroup = [];

@@ -1,0 +1,77 @@
+{
+  "name": "@rsvp/desktop",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "description": "RSVP Reader - Speed reading desktop application",
+  "author": "RSVP Reader",
+  "main": "out/main/main.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "dist": "electron-vite build && electron-builder --mac",
+    "dist:dir": "electron-vite build && electron-builder --mac --dir"
+  },
+  "dependencies": {
+    "@rsvp/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^6.2.1",
+    "electron": "^39.2.7",
+    "electron-builder": "^26.4.0",
+    "electron-vite": "^5.0.0",
+    "svelte": "^5.43.8",
+    "vite": "^7.2.4",
+    "vite-plugin-static-copy": "^3.1.4"
+  },
+  "build": {
+    "appId": "com.rsvp.reader",
+    "productName": "RSVP Reader",
+    "icon": "build/icon.png",
+    "mac": {
+      "category": "public.app-category.education",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["arm64"]
+        }
+      ],
+      "darkModeSupport": true,
+      "hardenedRuntime": true
+    },
+    "dmg": {
+      "title": "RSVP Reader",
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "files": [
+      "out/**/*"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "fileAssociations": [
+      {
+        "ext": "pdf",
+        "name": "PDF Document",
+        "role": "Viewer"
+      },
+      {
+        "ext": "epub",
+        "name": "EPUB Document",
+        "role": "Viewer"
+      }
+    ]
+  }
+}

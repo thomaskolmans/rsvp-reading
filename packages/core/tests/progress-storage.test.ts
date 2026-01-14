@@ -7,20 +7,20 @@ import {
   getSessionSummary,
   percentageToWordIndex,
   wordIndexToPercentage
-} from '../lib/progress-storage.js'
+} from '../src/progress-storage'
 
 // Mock localStorage
 const localStorageMock = (() => {
-  let store = {}
+  let store: Record<string, string> = {}
   return {
-    getItem: vi.fn((key) => store[key] || null),
-    setItem: vi.fn((key, value) => { store[key] = value }),
-    removeItem: vi.fn((key) => { delete store[key] }),
+    getItem: vi.fn((key: string) => store[key] || null),
+    setItem: vi.fn((key: string, value: string) => { store[key] = value }),
+    removeItem: vi.fn((key: string) => { delete store[key] }),
     clear: vi.fn(() => { store = {} })
   }
 })()
 
-Object.defineProperty(global, 'localStorage', {
+Object.defineProperty(globalThis, 'localStorage', {
   value: localStorageMock
 })
 
@@ -143,11 +143,11 @@ describe('progress-storage', () => {
 
       const summary = getSessionSummary()
 
-      expect(summary.currentWordIndex).toBe(25)
-      expect(summary.totalWords).toBe(100)
-      expect(summary.savedAt).toBe(1234567890)
-      expect(summary.hasText).toBe(true)
-      expect(summary.text).toBeUndefined()
+      expect(summary!.currentWordIndex).toBe(25)
+      expect(summary!.totalWords).toBe(100)
+      expect(summary!.savedAt).toBe(1234567890)
+      expect(summary!.hasText).toBe(true)
+      expect('text' in summary! === false || (summary as { text?: string }).text === undefined).toBe(true)
     })
 
     it('should indicate when text is missing', () => {
@@ -160,7 +160,7 @@ describe('progress-storage', () => {
 
       const summary = getSessionSummary()
 
-      expect(summary.hasText).toBe(false)
+      expect(summary!.hasText).toBe(false)
     })
   })
 

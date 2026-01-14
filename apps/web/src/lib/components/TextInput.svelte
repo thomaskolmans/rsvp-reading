@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import { getSupportedExtensions } from '../file-parsers.js';
+  import { getSupportedExtensions, isElectron, openFileDialog } from '@rsvp/core';
 
   export let text = '';
   export let isLoading = false;
@@ -21,8 +21,16 @@
     dispatch('fileselect', { file: event.target.files?.[0] });
   }
 
-  function triggerFileUpload() {
-    fileInputEl?.click();
+  async function triggerFileUpload() {
+    // Use native file dialog in Electron, browser file input otherwise
+    if (isElectron()) {
+      const result = await openFileDialog(getSupportedExtensions());
+      if (result) {
+        dispatch('fileselect', { file: result.file, filePath: result.filePath });
+      }
+    } else {
+      fileInputEl?.click();
+    }
   }
 </script>
 

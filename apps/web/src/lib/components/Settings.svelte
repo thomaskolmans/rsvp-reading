@@ -94,6 +94,25 @@
     </div>
   </section>
 
+  <!-- Display Section -->
+  <section class="settings-section">
+    <div class="section-header">
+      <svg viewBox="0 0 24 24" fill="currentColor" class="section-icon">
+        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+      </svg>
+      <span>Display</span>
+    </div>
+
+    <div class="control-row">
+      <div class="control-header">
+        <span>Words shown simultaneously</span>
+        <span class="control-value">{frameWordCount}</span>
+      </div>
+      <input type="range" min="1" max="7" step="2" bind:value={frameWordCount} class="slider">
+      <p class="hint-text">Odd numbers (1, 3, 5, 7) center the highlight best</p>
+    </div>
+  </section>
+
   <!-- Effects Section -->
   <section class="settings-section">
     <div class="section-header">
@@ -449,6 +468,13 @@
   .slider-sm::-moz-range-thumb {
     width: 20px;
     height: 20px;
+  }
+
+  .hint-text {
+    margin: 0.5rem 0 0;
+    color: #666;
+    font-size: 0.8rem;
+    line-height: 1.3;
   }
 
   /* Scrollbar */

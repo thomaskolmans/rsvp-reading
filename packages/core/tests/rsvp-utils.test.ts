@@ -8,7 +8,7 @@ import {
   splitWordForDisplay,
   shouldPauseAtWord,
   extractWordFrame
-} from '../lib/rsvp-utils.js'
+} from '../src/rsvp-utils'
 
 describe('parseText', () => {
   it('should split text into words', () => {

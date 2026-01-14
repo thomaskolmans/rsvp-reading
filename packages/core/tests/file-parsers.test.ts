@@ -1,13 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 // Mock file with arrayBuffer support
-function createMockFile(content, name, type) {
-  const blob = new Blob([content], { type })
+function createMockFile(content: string, name: string, type: string) {
   return {
     name,
     type,
     arrayBuffer: () => Promise.resolve(new ArrayBuffer(content.length))
-  }
+  } as unknown as File
 }
 
 // We need to mock the external libraries since they require browser APIs
@@ -22,7 +21,7 @@ vi.mock('epubjs', () => ({
 }))
 
 // Import after mocks are set up
-import { parseFile, getSupportedExtensions } from '../lib/file-parsers.js'
+import { parseFile, getSupportedExtensions } from '../src/file-parsers'
 
 describe('getSupportedExtensions', () => {
   it('should return supported file extensions', () => {
@@ -90,7 +89,7 @@ describe('parsePDF', () => {
       getPage: vi.fn().mockResolvedValue(mockPage)
     }
 
-    pdfjsLib.getDocument.mockReturnValue({
+    ;(pdfjsLib.getDocument as ReturnType<typeof vi.fn>).mockReturnValue({
       promise: Promise.resolve(mockPdf)
     })
 
@@ -124,7 +123,7 @@ describe('parsePDF', () => {
         .mockResolvedValueOnce(mockPage2)
     }
 
-    pdfjsLib.getDocument.mockReturnValue({
+    ;(pdfjsLib.getDocument as ReturnType<typeof vi.fn>).mockReturnValue({
       promise: Promise.resolve(mockPdf)
     })
 
@@ -154,7 +153,7 @@ describe('parsePDF', () => {
       getPage: vi.fn().mockResolvedValue(mockPage)
     }
 
-    pdfjsLib.getDocument.mockReturnValue({
+    ;(pdfjsLib.getDocument as ReturnType<typeof vi.fn>).mockReturnValue({
       promise: Promise.resolve(mockPdf)
     })
 
@@ -188,7 +187,7 @@ describe('parseEPUB', () => {
       load: vi.fn().mockResolvedValue('<html><body>Chapter content here</body></html>')
     }
 
-    epubjs.default.mockReturnValue(mockBook)
+    ;(epubjs.default as ReturnType<typeof vi.fn>).mockReturnValue(mockBook)
 
     const file = createMockFile('fake epub content', 'test.epub', 'application/epub+zip')
 
@@ -211,14 +210,14 @@ describe('parseEPUB', () => {
         items: [mockSection1, mockSection2],
         spineItems: [mockSection1, mockSection2]
       },
-      load: vi.fn().mockImplementation((href) => {
+      load: vi.fn().mockImplementation((href: string) => {
         if (href === 'chapter1.xhtml') return Promise.resolve('<html><body>Chapter One</body></html>')
         if (href === 'chapter2.xhtml') return Promise.resolve('<html><body>Chapter Two</body></html>')
         return Promise.resolve('')
       })
     }
 
-    epubjs.default.mockReturnValue(mockBook)
+    ;(epubjs.default as ReturnType<typeof vi.fn>).mockReturnValue(mockBook)
 
     const file = createMockFile('fake epub content', 'multiChapter.epub', 'application/epub+zip')
 
@@ -240,14 +239,14 @@ describe('parseEPUB', () => {
         items: [mockSection1, mockSection2],
         spineItems: [mockSection1, mockSection2]
       },
-      load: vi.fn().mockImplementation((href) => {
+      load: vi.fn().mockImplementation((href: string) => {
         if (href === 'broken.xhtml') return Promise.reject(new Error('Failed to load'))
         if (href === 'working.xhtml') return Promise.resolve('<html><body>Working chapter</body></html>')
         return Promise.resolve('')
       })
     }
 
-    epubjs.default.mockReturnValue(mockBook)
+    ;(epubjs.default as ReturnType<typeof vi.fn>).mockReturnValue(mockBook)
 
     const file = createMockFile('fake epub content', 'partial.epub', 'application/epub+zip')
 
@@ -281,7 +280,7 @@ describe('text cleaning', () => {
       getPage: vi.fn().mockResolvedValue(mockPage)
     }
 
-    pdfjsLib.getDocument.mockReturnValue({
+    ;(pdfjsLib.getDocument as ReturnType<typeof vi.fn>).mockReturnValue({
       promise: Promise.resolve(mockPdf)
     })
 
@@ -311,7 +310,7 @@ describe('text cleaning', () => {
       getPage: vi.fn().mockResolvedValue(mockPage)
     }
 
-    pdfjsLib.getDocument.mockReturnValue({
+    ;(pdfjsLib.getDocument as ReturnType<typeof vi.fn>).mockReturnValue({
       promise: Promise.resolve(mockPdf)
     })
 
