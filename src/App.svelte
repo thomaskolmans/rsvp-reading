@@ -467,7 +467,7 @@
       <div class="jump-to-panel">
         <h3>Jump to position</h3>
 
-        <!-- Tabs para alternar entre modos -->
+        <!-- Tabs to switch between modes -->
         <div class="search-tabs">
           <button
             class:active={!isSearchMode}
@@ -484,7 +484,7 @@
         </div>
 
         {#if isSearchMode}
-          <!-- Modo de busca -->
+          <!-- Search mode -->
           <p class="jump-hint">Search for a word or phrase in the text</p>
           <form on:submit|preventDefault={() => { searchResults = searchText(jumpToValue); }}>
             <!-- svelte-ignore a11y_autofocus -->
@@ -527,7 +527,7 @@
           {/if}
 
         {:else}
-          <!-- Modo original por posição -->
+          <!-- Original mode by position -->
           <p class="jump-hint">Enter word number (e.g., 150) or percentage (e.g., 50%)</p>
           <form on:submit|preventDefault={() => jumpToWord(jumpToValue)}>
             <!-- svelte-ignore a11y_autofocus -->
