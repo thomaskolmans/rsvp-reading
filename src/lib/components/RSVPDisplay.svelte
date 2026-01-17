@@ -23,6 +23,9 @@
   // Words before and after the highlighted word (for multi-word mode)
   $: wordsBefore = useMultiMode ? wordGroup.slice(0, highlightIndex) : [];
   $: wordsAfter = useMultiMode ? wordGroup.slice(highlightIndex + 1) : [];
+
+  // FIX: Detect Hebrew, Arabic, and other RTL scripts
+  $: isRtl = /[\u0591-\u07FF\uFB1D-\uFDFD\uFE70-\uFEFC]/.test(currentWord);
 </script>
 
 <div class="rsvp-display">
@@ -41,16 +44,28 @@
       <span class="orp">{focusChar}</span>
 
       <!-- Content before ORP: prefix of current word + words before -->
-      <span class="before-orp">
-        {#if useMultiMode && wordsBefore.length > 0}
-          <span class="context-words">{wordsBefore.join(' ')}</span>&nbsp;
-        {/if}{wordPrefix}
+      <span class="before-orp" style="direction: {isRtl ? 'rtl' : 'ltr'}">
+        {#if isRtl}
+          {wordSuffix}{#if useMultiMode && wordsAfter.length > 0}
+            &nbsp;<span class="context-words">{wordsAfter.join(' ')}</span>
+          {/if}
+        {:else}
+          {#if useMultiMode && wordsBefore.length > 0}
+            <span class="context-words">{wordsBefore.join(' ')}</span>&nbsp;
+          {/if}{wordPrefix}
+        {/if}
       </span>
 
       <!-- Content after ORP: suffix of current word + words after -->
-      <span class="after-orp">
-        {wordSuffix}{#if useMultiMode && wordsAfter.length > 0}
-          &nbsp;<span class="context-words">{wordsAfter.join(' ')}</span>
+      <span class="after-orp" style="direction: {isRtl ? 'rtl' : 'ltr'}">
+        {#if isRtl}
+          {#if useMultiMode && wordsBefore.length > 0}
+            <span class="context-words">{wordsBefore.join(' ')}</span>&nbsp;
+          {/if}{wordPrefix}
+        {:else}
+          {wordSuffix}{#if useMultiMode && wordsAfter.length > 0}
+            &nbsp;<span class="context-words">{wordsAfter.join(' ')}</span>
+          {/if}
         {/if}
       </span>
     {:else}
@@ -141,7 +156,8 @@
     left: 50%;
     transform: translateX(calc(-100% - 0.5ch));
     color: #fff;
-    direction: ltr;
+    /* direction: ltr; -- REMOVED to support dynamic RTL/LTR via inline style */
+    text-align: right; /* Keeps text growing towards the center */
   }
 
   .after-orp {
