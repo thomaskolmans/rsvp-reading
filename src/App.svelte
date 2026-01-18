@@ -37,6 +37,8 @@
   let jumpToValue = '';
   let savedSessionInfo = null;
   let showSavedSessionPrompt = false;
+  let searchResults = [];
+  let isSearchMode = false;
 
   // Settings
   let wordsPerMinute = 300;
@@ -255,6 +257,34 @@
     jumpToValue = '';
   }
 
+  function searchText(query) {
+    if (!query || query.length < 2 || words.length === 0) return [];
+
+    const results = [];
+    const lowerQuery = query.toLowerCase();
+    const maxResults = 20;
+
+    for (let i = 0; i < words.length && results.length < maxResults; i++) {
+      const contextWindow = words.slice(i, i + 10).join(' ').toLowerCase();
+
+      if (contextWindow.includes(lowerQuery)) {
+        const start = Math.max(0, i - 5);
+        const end = Math.min(words.length, i + 15);
+        const context = words.slice(start, end).join(' ');
+
+        results.push({
+          index: i,
+          context: context,
+          percentage: Math.round((i / words.length) * 100)
+        });
+
+        i += 5;
+      }
+    }
+
+    return results;
+  }
+
   function handleProgressClick(event) {
     const percentage = event.detail.percentage;
     const targetIndex = Math.floor((percentage / 100) * words.length);
@@ -276,6 +306,8 @@
         if (showJumpTo) {
           showJumpTo = false;
           jumpToValue = '';
+          searchResults = [];
+          isSearchMode = false;
         } else if (showSettings || showTextInput) {
           showSettings = false;
           showTextInput = false;
@@ -431,29 +463,92 @@
   {/if}
 
   {#if showJumpTo && !isFocusMode}
-    <div class="panel-overlay" on:click|self={() => showJumpTo = false} role="presentation">
+    <div class="panel-overlay" on:click|self={() => { showJumpTo = false; searchResults = []; isSearchMode = false; }} role="presentation">
       <div class="jump-to-panel">
         <h3>Jump to position</h3>
-        <p class="jump-hint">Enter word number (e.g., 150) or percentage (e.g., 50%)</p>
-        <form on:submit|preventDefault={() => jumpToWord(jumpToValue)}>
-          <!-- svelte-ignore a11y_autofocus -->
-          <input
-            type="text"
-            bind:value={jumpToValue}
-            placeholder="Word # or %"
-            autofocus
-          />
-          <div class="jump-actions">
-            <button type="button" class="secondary" on:click={() => showJumpTo = false}>Cancel</button>
-            <button type="submit" class="primary">Go</button>
-          </div>
-        </form>
-        <div class="quick-jumps">
-          <button on:click={() => jumpToWord('0')}>Start</button>
-          <button on:click={() => jumpToWord('25%')}>25%</button>
-          <button on:click={() => jumpToWord('50%')}>50%</button>
-          <button on:click={() => jumpToWord('75%')}>75%</button>
+
+        <!-- Tabs to switch between modes -->
+        <div class="search-tabs">
+          <button
+            class:active={!isSearchMode}
+            on:click={() => { isSearchMode = false; searchResults = []; jumpToValue = ''; }}
+          >
+            By Position
+          </button>
+          <button
+            class:active={isSearchMode}
+            on:click={() => { isSearchMode = true; jumpToValue = ''; }}
+          >
+            Search Text
+          </button>
         </div>
+
+        {#if isSearchMode}
+          <!-- Search mode -->
+          <p class="jump-hint">Search for a word or phrase in the text</p>
+          <form on:submit|preventDefault={() => { searchResults = searchText(jumpToValue); }}>
+            <!-- svelte-ignore a11y_autofocus -->
+            <input
+              type="text"
+              bind:value={jumpToValue}
+              placeholder="Type to search..."
+              on:input={() => {
+                if (jumpToValue.length >= 2) {
+                  searchResults = searchText(jumpToValue);
+                } else {
+                  searchResults = [];
+                }
+              }}
+              autofocus
+            />
+          </form>
+
+          {#if searchResults.length > 0}
+            <div class="search-results">
+              {#each searchResults as result}
+                <button
+                  class="search-result"
+                  on:click={() => {
+                    currentWordIndex = result.index;
+                    progress = (currentWordIndex / words.length) * 100;
+                    showJumpTo = false;
+                    jumpToValue = '';
+                    searchResults = [];
+                    isSearchMode = false;
+                  }}
+                >
+                  <span class="result-position">Word {result.index} ({result.percentage}%)</span>
+                  <span class="result-context">...{result.context}...</span>
+                </button>
+              {/each}
+            </div>
+          {:else if jumpToValue.length >= 2}
+            <p class="no-results">No results found</p>
+          {/if}
+
+        {:else}
+          <!-- Original mode by position -->
+          <p class="jump-hint">Enter word number (e.g., 150) or percentage (e.g., 50%)</p>
+          <form on:submit|preventDefault={() => jumpToWord(jumpToValue)}>
+            <!-- svelte-ignore a11y_autofocus -->
+            <input
+              type="text"
+              bind:value={jumpToValue}
+              placeholder="Word # or %"
+              autofocus
+            />
+            <div class="jump-actions">
+              <button type="button" class="secondary" on:click={() => showJumpTo = false}>Cancel</button>
+              <button type="submit" class="primary">Go</button>
+            </div>
+          </form>
+          <div class="quick-jumps">
+            <button on:click={() => jumpToWord('0')}>Start</button>
+            <button on:click={() => jumpToWord('25%')}>25%</button>
+            <button on:click={() => jumpToWord('50%')}>50%</button>
+            <button on:click={() => jumpToWord('75%')}>75%</button>
+          </div>
+        {/if}
       </div>
     </div>
   {/if}
@@ -868,5 +963,91 @@
   .icon-btn:disabled {
     opacity: 0.3;
     cursor: not-allowed;
+  }
+
+  /* Search tabs */
+  .search-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .search-tabs button {
+    flex: 1;
+    padding: 0.5rem;
+    background: #222;
+    border: 1px solid #333;
+    border-radius: 6px;
+    color: #888;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+
+  .search-tabs button:hover {
+    background: #333;
+    color: #fff;
+  }
+
+  .search-tabs button.active {
+    background: #ff4444;
+    border-color: #ff4444;
+    color: #fff;
+  }
+
+  /* Search results */
+  .search-results {
+    max-height: 250px;
+    overflow-y: auto;
+    margin-top: 1rem;
+    border: 1px solid #333;
+    border-radius: 6px;
+  }
+
+  .search-result {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    padding: 0.75rem;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #333;
+    color: #fff;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.2s;
+  }
+
+  .search-result:last-child {
+    border-bottom: none;
+  }
+
+  .search-result:hover {
+    background: #222;
+  }
+
+  .result-position {
+    font-size: 0.75rem;
+    color: #ff4444;
+    margin-bottom: 0.25rem;
+  }
+
+  .result-context {
+    font-size: 0.85rem;
+    color: #aaa;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .no-results {
+    color: #666;
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.9rem;
   }
 </style>
