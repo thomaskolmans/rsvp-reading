@@ -10,6 +10,7 @@
   export let pauseDuration = 500;
   export let frameWordCount = 1;
   export let wordLengthWPMMultiplier = 5;
+  export let showContextEnabled = true;
 
   const dispatch = createEventDispatcher();
 
@@ -91,6 +92,20 @@
       </div>
       <input type="range" min="1" max="7" step="2" bind:value={frameWordCount} class="slider">
       <p class="hint-text">Odd numbers (1, 3, 5, 7) center the highlight best</p>
+    </div>
+
+    <div class="toggle-row">
+      <span class="toggle-label">Show context when paused</span>
+      <button
+        class="toggle"
+        class:active={showContextEnabled}
+        on:click={() => showContextEnabled = !showContextEnabled}
+        role="switch"
+        aria-checked={showContextEnabled}
+        aria-label="Toggle show context when paused"
+      >
+        <span class="toggle-thumb"></span>
+      </button>
     </div>
   </section>
 
