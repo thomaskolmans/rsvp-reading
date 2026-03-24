@@ -37,6 +37,9 @@
   let jumpToValue = '';
   let savedSessionInfo = null;
   let showSavedSessionPrompt = false;
+  let chapters = [];
+  let currentChapterIndex = -1;
+
 
   // Settings
   let wordsPerMinute = 300;
@@ -58,12 +61,57 @@
   $: wordFrame = extractWordFrame(words, Math.max(0, currentWordIndex - 1), frameWordCount);
   $: timeRemaining = formatTimeRemaining(words.length - currentWordIndex, wordsPerMinute);
   $: isFocusMode = isPlaying || isPaused;
+  $: updateCurrentChapter();
+
+
+  function detectChapters(text) {
+  const words = text.split(/\s+/);
+  const detected = [];
+
+  for (let i = 0; i < words.length; i++) {
+    const w = words[i];
+
+    // Only allow structured numbers like 1, 1.1, 1.1.2
+    if (!/^\d+(\.\d+)*$/.test(w)) continue;
+
+    // Reject years (1900–2099)
+    const num = parseInt(w);
+    if (num >= 1900 && num <= 2099) continue;
+
+    // Look ahead
+    const next = words[i + 1] || '';
+    const next2 = words[i + 2] || '';
+
+    // Require meaningful title words (not symbols or short junk)
+    if (
+      next.length < 3 ||
+      !/^[A-Z]/.test(next) // must start with capital
+    ) continue;
+
+    // Avoid duplicates close together
+    if (
+      detected.length > 0 &&
+      Math.abs(detected[detected.length - 1].wordIndex - i) < 20
+    ) continue;
+
+    detected.push({
+      title: [w, next, next2].join(' '),
+      wordIndex: i
+    });
+  }
+
+  return detected;
+}
+
 
   function parseText() {
     words = parseTextUtil(text);
+    chapters = detectChapters(text);
+    currentChapterIndex = -1;
     currentWordIndex = 0;
     progress = 0;
-  }
+}
+
 
   function getWordDelay(word) {
     return getWordDelayUtil(word, wordsPerMinute, pauseOnPunctuation, punctuationPauseMultiplier, wordLengthWPMMultiplier);
@@ -254,6 +302,40 @@
     showJumpTo = false;
     jumpToValue = '';
   }
+  function jumpToChapter(index) {
+   if (!chapters.length) return;
+   if (index < 0 || index >= chapters.length) return;
+
+   const chapter = chapters[index];
+   currentChapterIndex = index;
+   currentWordIndex = Math.max(0, Math.min(words.length, chapter.wordIndex));
+   progress = (currentWordIndex / words.length) * 100;
+
+   showJumpTo = false;
+}
+
+  function handleChapterChange(event) {
+    const value = event.target.value;
+    if (value === '') return;
+    jumpToChapter(Number(value));
+}
+
+  function updateCurrentChapter() {
+   if (!chapters.length) return;
+
+   // Find the last chapter whose wordIndex is <= currentWordIndex
+   let index = -1;
+   for (let i = 0; i < chapters.length; i++) {
+    if (chapters[i].wordIndex <= currentWordIndex) {
+      index = i;
+    } else {
+      break;
+    }
+  }
+
+  currentChapterIndex = index;
+}
+
 
   function handleProgressClick(event) {
     const percentage = event.detail.percentage;
@@ -352,8 +434,35 @@
   <!-- Header - hidden during focus mode -->
   {#if !isFocusMode}
     <header>
-      <h1>RSVP Reader</h1>
+  <h1>RSVP Reader</h1>
+
+  <p style="color: red; font-size: 12px;">
+    Chapters detected: {chapters.length}
+  </p>
+
+      
       <div class="header-actions">
+        {#if chapters.length > 0}
+  <select
+    class="chapter-select"
+    bind:value={currentChapterIndex}
+    on:change={handleChapterChange}
+
+
+  >
+      <option value="" disabled>
+       Jump to chapter
+      </option>
+
+
+     {#each chapters as chapter, index}
+      <option value={index}>
+         {chapter.title}
+         </option>
+        {/each}
+     </select>
+    {/if}
+
         <button
           class="icon-btn"
           on:click={() => { showJumpTo = !showJumpTo; showSettings = false; showTextInput = false; }}
@@ -869,4 +978,31 @@
     opacity: 0.3;
     cursor: not-allowed;
   }
+  .chapter-select {
+  background: #111;
+  border: 1px solid #333;
+  color: #888;
+  padding: 0.45rem 0.6rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  outline: none;
+  max-width: 220px;
+}
+
+.chapter-select:hover {
+  border-color: #555;
+  color: #fff;
+}
+
+.chapter-select:focus {
+  border-color: #ff4444;
+  color: #fff;
+}
+
+.chapter-select option {
+  background: #111;
+  color: #fff;
+}
+
 </style>
