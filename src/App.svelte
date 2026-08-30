@@ -498,6 +498,12 @@
       on:seek={handleProgressClick}
     />
 
+{#if isPaused}
+  <div class="word-counter">
+    Пауза на слове {currentWordIndex + 1} из {words.length}
+  </div>
+{/if}
+
     <div class="controls-area">
       <Controls
         {isPlaying}
@@ -869,4 +875,14 @@
     opacity: 0.3;
     cursor: not-allowed;
   }
+
+.word-counter {
+  text-align: center;
+  color: #ff4444;          
+  font-size: 0.9rem;
+  font-family: monospace;  
+  margin-bottom: 0.25rem;
+  letter-spacing: 0.5px;   
+}
+
 </style>
