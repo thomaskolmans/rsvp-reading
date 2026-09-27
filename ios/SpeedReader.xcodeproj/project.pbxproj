@@ -1,0 +1,237 @@
+// !$*UTF8*$!
+{
+  archiveVersion = 1;
+  classes = {};
+  objectVersion = 56;
+  objects = {
+/* Build files */
+    A10000000000000000000001 = {isa = PBXBuildFile; fileRef = A10000000000000000000002; };
+    A10000000000000000000003 = {isa = PBXBuildFile; fileRef = A10000000000000000000004; };
+    B1000000000000000001001 = {isa = PBXBuildFile; fileRef = A20000000000000000000F1; };
+    B1000000000000000001002 = {isa = PBXBuildFile; fileRef = A20000000000000000000F2; };
+    B1000000000000000001003 = {isa = PBXBuildFile; fileRef = A20000000000000000000F3; };
+    B1000000000000000001004 = {isa = PBXBuildFile; fileRef = A20000000000000000000F4; };
+    B1000000000000000001005 = {isa = PBXBuildFile; fileRef = A20000000000000000000F5; };
+    B1000000000000000001006 = {isa = PBXBuildFile; fileRef = A20000000000000000000F6; };
+    B1000000000000000001007 = {isa = PBXBuildFile; fileRef = A20000000000000000000F7; };
+    B1000000000000000001008 = {isa = PBXBuildFile; fileRef = A20000000000000000000F8; };
+    B1000000000000000001009 = {isa = PBXBuildFile; fileRef = A20000000000000000000F9; };
+    B100000000000000000100A = {isa = PBXBuildFile; fileRef = A20000000000000000000FA; };
+    B100000000000000000100B = {isa = PBXBuildFile; fileRef = A20000000000000000000FB; };
+    B100000000000000000100C = {isa = PBXBuildFile; fileRef = A20000000000000000000FC; };
+    B100000000000000000100D = {isa = PBXBuildFile; fileRef = A20000000000000000000FD; };
+    B100000000000000000100E = {isa = PBXBuildFile; fileRef = A20000000000000000000FE; };
+    B100000000000000000100F = {isa = PBXBuildFile; fileRef = A20000000000000000000FF; };
+    B1000000000000000002001 = {isa = PBXBuildFile; fileRef = A2000000000000000000130; };
+    B1000000000000000003001 = {isa = PBXBuildFile; fileRef = A2000000000000000000140; };
+    B1000000000000000003002 = {isa = PBXBuildFile; fileRef = A2000000000000000000141; };
+    B1000000000000000003003 = {isa = PBXBuildFile; fileRef = A2000000000000000000142; };
+    B1000000000000000004001 = {isa = PBXBuildFile; fileRef = A2000000000000000000150; };
+    B1000000000000000004002 = {isa = PBXBuildFile; fileRef = A2000000000000000000154; };
+    B1000000000000000004003 = {isa = PBXBuildFile; fileRef = A2000000000000000000154; };
+    B1000000000000000004004 = {isa = PBXBuildFile; fileRef = A20000000000000000000F2; };
+    B1000000000000000004005 = {isa = PBXBuildFile; fileRef = A2000000000000000000155; };
+    B1000000000000000004006 = {isa = PBXBuildFile; fileRef = A2000000000000000000166; };
+    B1000000000000000004007 = {isa = PBXBuildFile; fileRef = A2000000000000000000168; };
+    B1000000000000000005001 = {isa = PBXBuildFile; fileRef = A2000000000000000000180; };
+    B1000000000000000005002 = {isa = PBXBuildFile; fileRef = A2000000000000000000181; };
+    B1000000000000000005003 = {isa = PBXBuildFile; fileRef = A2000000000000000000182; };
+    B1000000000000000005004 = {isa = PBXBuildFile; fileRef = A2000000000000000000183; };
+    B1000000000000000005005 = {isa = PBXBuildFile; fileRef = A2000000000000000000184; };
+    B1000000000000000005006 = {isa = PBXBuildFile; fileRef = A2000000000000000000185; };
+/* File references */
+    A10000000000000000000002 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedReaderApp.swift; sourceTree = "<group>"; };
+    A10000000000000000000004 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+    A20000000000000000000F1 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingUtils.swift; sourceTree = "<group>"; };
+    A20000000000000000000F2 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextCleaner.swift; sourceTree = "<group>"; };
+    A20000000000000000000F3 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderSettings.swift; sourceTree = "<group>"; };
+    A20000000000000000000F4 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionStore.swift; sourceTree = "<group>"; };
+    A20000000000000000000F5 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderEngine.swift; sourceTree = "<group>"; };
+    A20000000000000000000F6 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipArchive.swift; sourceTree = "<group>"; };
+    A20000000000000000000F7 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpubParser.swift; sourceTree = "<group>"; };
+    A20000000000000000000F8 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PdfTextExtractor.swift; sourceTree = "<group>"; };
+    A20000000000000000000F9 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileImportService.swift; sourceTree = "<group>"; };
+    A20000000000000000000FA = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordStage.swift; sourceTree = "<group>"; };
+    A20000000000000000000FB = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBarView.swift; sourceTree = "<group>"; };
+    A20000000000000000000FC = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackControlsView.swift; sourceTree = "<group>"; };
+    A20000000000000000000FD = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSheet.swift; sourceTree = "<group>"; };
+    A20000000000000000000FE = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputSheet.swift; sourceTree = "<group>"; };
+    A20000000000000000000FF = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpToSheet.swift; sourceTree = "<group>"; };
+    A2000000000000000000105 = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+    A2000000000000000000130 = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+    A2000000000000000000140 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryStore.swift; sourceTree = "<group>"; };
+    A2000000000000000000141 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatsStore.swift; sourceTree = "<group>"; };
+    A2000000000000000000142 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibrarySheet.swift; sourceTree = "<group>"; };
+    A2000000000000000000150 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+    A2000000000000000000151 = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+    A2000000000000000000152 = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SpeedReaderShareExtension.entitlements; sourceTree = "<group>"; };
+    A2000000000000000000153 = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SpeedReader.entitlements; sourceTree = "<group>"; };
+    A2000000000000000000154 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroupStore.swift; sourceTree = "<group>"; };
+    A2000000000000000000155 = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SpeedReaderShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+    A2000000000000000000165 = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+    A2000000000000000000167 = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+    A2000000000000000000180 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeColors.swift; sourceTree = "<group>"; };
+    A2000000000000000000181 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrientationLock.swift; sourceTree = "<group>"; };
+    A2000000000000000000182 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderHeaderView.swift; sourceTree = "<group>"; };
+    A2000000000000000000183 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fb2Parser.swift; sourceTree = "<group>"; };
+    A2000000000000000000184 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocxParser.swift; sourceTree = "<group>"; };
+    A2000000000000000000185 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageOverride.swift; sourceTree = "<group>"; };
+    A10000000000000000000005 = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpeedReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* Groups */
+    A10000000000000000000006 = {
+      isa = PBXGroup;
+      children = (A10000000000000000000007, A10000000000000000000008, A2000000000000000000164);
+      sourceTree = "<group>";
+    };
+    A10000000000000000000007 = {
+      isa = PBXGroup;
+      children = (
+        A10000000000000000000002,
+        A10000000000000000000004,
+        A2000000000000000000120,
+        A2000000000000000000121,
+        A2000000000000000000122,
+        A2000000000000000000105,
+        A2000000000000000000130,
+        A2000000000000000000153,
+        A2000000000000000000166,
+        A2000000000000000000181,
+      );
+      path = SpeedReader;
+      sourceTree = "<group>";
+    };
+    A2000000000000000000120 = {isa = PBXGroup; children = (A20000000000000000000F1, A20000000000000000000F2, A20000000000000000000F3, A20000000000000000000F4, A20000000000000000000F5, A2000000000000000000140, A2000000000000000000141, A2000000000000000000154, A2000000000000000000185); path = Core; sourceTree = "<group>"; };
+    A2000000000000000000121 = {isa = PBXGroup; children = (A20000000000000000000FA, A20000000000000000000FB, A20000000000000000000FC, A20000000000000000000FD, A20000000000000000000FE, A20000000000000000000FF, A2000000000000000000142, A2000000000000000000180, A2000000000000000000182); path = Views; sourceTree = "<group>"; };
+    A2000000000000000000122 = {isa = PBXGroup; children = (A20000000000000000000F6, A20000000000000000000F7, A20000000000000000000F8, A20000000000000000000F9, A2000000000000000000183, A2000000000000000000184); path = FileParsers; sourceTree = "<group>"; };
+    A2000000000000000000166 = {isa = PBXVariantGroup; children = (A2000000000000000000165); name = Localizable.strings; sourceTree = "<group>"; };
+    A2000000000000000000168 = {isa = PBXVariantGroup; children = (A2000000000000000000167); name = Localizable.strings; sourceTree = "<group>"; };
+    A2000000000000000000164 = {isa = PBXGroup; children = (A2000000000000000000150, A2000000000000000000151, A2000000000000000000152, A2000000000000000000168); path = ShareExtension; sourceTree = "<group>"; };
+    A10000000000000000000008 = {
+      isa = PBXGroup;
+      children = (A10000000000000000000005);
+      name = Products;
+      sourceTree = "<group>";
+    };
+/* Target */
+    A10000000000000000000009 = {
+      isa = PBXNativeTarget;
+      buildConfigurationList = A1000000000000000000000A;
+      buildPhases = (A1000000000000000000000B, A2000000000000000000131, A2000000000000000000158);
+      buildRules = ();
+      dependencies = (A2000000000000000000159);
+      name = SpeedReader;
+      productName = SpeedReader;
+      productReference = A10000000000000000000005;
+      productType = "com.apple.product-type.application";
+    };
+    A1000000000000000000000B = {
+      isa = PBXSourcesBuildPhase;
+      buildActionMask = 2147483647;
+      files = (
+        A10000000000000000000001,
+        A10000000000000000000003,
+        B1000000000000000001001,
+        B1000000000000000001002,
+        B1000000000000000001003,
+        B1000000000000000001004,
+        B1000000000000000001005,
+        B1000000000000000001006,
+        B1000000000000000001007,
+        B1000000000000000001008,
+        B1000000000000000001009,
+        B100000000000000000100A,
+        B100000000000000000100B,
+        B100000000000000000100C,
+        B100000000000000000100D,
+        B100000000000000000100E,
+        B100000000000000000100F,
+        B1000000000000000003001,
+        B1000000000000000003002,
+        B1000000000000000003003,
+        B1000000000000000004002,
+        B1000000000000000005001,
+        B1000000000000000005002,
+        B1000000000000000005003,
+        B1000000000000000005004,
+        B1000000000000000005005,
+        B1000000000000000005006,
+      );
+      runOnlyForDeploymentPostprocessing = 0;
+    };
+    A2000000000000000000131 = {
+      isa = PBXResourcesBuildPhase;
+      buildActionMask = 2147483647;
+      files = (
+        B1000000000000000002001,
+        B1000000000000000004006,
+      );
+      runOnlyForDeploymentPostprocessing = 0;
+    };
+    A2000000000000000000158 = {
+      isa = PBXCopyFilesBuildPhase;
+      buildActionMask = 2147483647;
+      dstPath = "";
+      dstSubfolderSpec = 13;
+      files = (
+        B1000000000000000004005,
+      );
+      name = "Embed Foundation Extensions";
+      runOnlyForDeploymentPostprocessing = 0;
+    };
+    A2000000000000000000156 = {
+      isa = PBXNativeTarget;
+      buildConfigurationList = A2000000000000000000161;
+      buildPhases = (A2000000000000000000157, A2000000000000000000169);
+      buildRules = ();
+      dependencies = ();
+      name = SpeedReaderShareExtension;
+      productName = SpeedReaderShareExtension;
+      productReference = A2000000000000000000155;
+      productType = "com.apple.product-type.app-extension";
+    };
+    A2000000000000000000157 = {
+      isa = PBXSourcesBuildPhase;
+      buildActionMask = 2147483647;
+      files = (
+        B1000000000000000004001,
+        B1000000000000000004003,
+        B1000000000000000004004,
+      );
+      runOnlyForDeploymentPostprocessing = 0;
+    };
+    A2000000000000000000169 = {
+      isa = PBXResourcesBuildPhase;
+      buildActionMask = 2147483647;
+      files = (
+        B1000000000000000004007,
+      );
+      runOnlyForDeploymentPostprocessing = 0;
+    };
+    A2000000000000000000160 = {isa = PBXContainerItemProxy; containerPortal = A1000000000000000000000C; proxyType = 1; remoteGlobalIDString = A2000000000000000000156; remoteInfo = SpeedReaderShareExtension; };
+    A2000000000000000000159 = {isa = PBXTargetDependency; target = A2000000000000000000156; targetProxy = A2000000000000000000160; };
+    A1000000000000000000000C = {
+      isa = PBXProject;
+      attributes = {BuildIndependentTargetsInParallel = 1; LastSwiftUpdateCheck = 1500; LastUpgradeCheck = 1500; TargetAttributes = {A10000000000000000000009 = {CreatedOnToolsVersion = 15.0;};};};
+      buildConfigurationList = A1000000000000000000000D;
+      compatibilityVersion = "Xcode 14.0";
+      developmentRegion = en;
+      hasScannedForEncodings = 0;
+      knownRegions = (en, Base, ru);
+      mainGroup = A10000000000000000000006;
+      productRefGroup = A10000000000000000000008;
+      projectDirPath = "";
+      projectRoot = "";
+      targets = (A10000000000000000000009, A2000000000000000000156);
+    };
+    A1000000000000000000000E = {isa = XCBuildConfiguration; buildSettings = {ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ENABLE_MODULES = YES; CLANG_ENABLE_OBJC_ARC = YES; CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES; CLANG_WARN_BOOL_CONVERSION = YES; CLANG_WARN_COMMA = YES; CLANG_WARN_CONSTANT_CONVERSION = YES; CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES; CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR; CLANG_WARN_DOCUMENTATION_COMMENTS = YES; CLANG_WARN_EMPTY_BODY = YES; CLANG_WARN_ENUM_CONVERSION = YES; CLANG_WARN_INFINITE_RECURSION = YES; CLANG_WARN_INT_CONVERSION = YES; CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES; CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES; CLANG_WARN_OBJC_LITERAL_CONVERSION = YES; CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR; CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES; CLANG_WARN_RANGE_LOOP_ANALYSIS = YES; CLANG_WARN_STRICT_PROTOTYPES = YES; CLANG_WARN_SUSPICIOUS_MOVE = YES; CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE; CLANG_WARN_UNREACHABLE_CODE = YES; COPY_PHASE_STRIP = NO; DEBUG_INFORMATION_FORMAT = dwarf; ENABLE_STRICT_OBJC_MSGSEND = YES; ENABLE_TESTABILITY = YES; GCC_C_LANGUAGE_STANDARD = gnu17; GCC_DYNAMIC_NO_PIC = NO; GCC_NO_COMMON_BLOCKS = YES; GCC_OPTIMIZATION_LEVEL = 0; GCC_PREPROCESSOR_DEFINITIONS = ("DEBUG=1", "$(inherited)"); GCC_WARN_64_TO_32_BIT_CONVERSION = YES; GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR; GCC_WARN_UNDECLARED_SELECTOR = YES; GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE; GCC_WARN_UNUSED_FUNCTION = YES; GCC_WARN_UNUSED_VARIABLE = YES; IPHONEOS_DEPLOYMENT_TARGET = 17.0; MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE; MTL_FAST_MATH = YES; ONLY_ACTIVE_ARCH = YES; SDKROOT = iphoneos; SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG; SWIFT_OPTIMIZATION_LEVEL = "-Onone";}; name = Debug; };
+    A1000000000000000000000F = {isa = XCBuildConfiguration; buildSettings = {ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ENABLE_MODULES = YES; CLANG_ENABLE_OBJC_ARC = YES; COPY_PHASE_STRIP = NO; DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym"; ENABLE_NS_ASSERTIONS = NO; GCC_C_LANGUAGE_STANDARD = gnu17; IPHONEOS_DEPLOYMENT_TARGET = 17.0; MTL_ENABLE_DEBUG_INFO = NO; MTL_FAST_MATH = YES; SDKROOT = iphoneos; SWIFT_COMPILATION_MODE = wholemodule; SWIFT_OPTIMIZATION_LEVEL = "-O"; VALIDATE_PRODUCT = YES;}; name = Release; };
+    A10000000000000000000010 = {isa = XCBuildConfiguration; buildSettings = {ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; DEVELOPMENT_ASSET_PATHS = ""; DEVELOPMENT_TEAM = ""; ENABLE_PREVIEWS = YES; CODE_SIGN_ENTITLEMENTS = SpeedReader/SpeedReader.entitlements; GENERATE_INFOPLIST_FILE = YES; INFOPLIST_FILE = SpeedReader/Info.plist; INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES; INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES; INFOPLIST_KEY_UILaunchScreen_Generation = YES; INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"; INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"; MARKETING_VERSION = 1.0; PRODUCT_BUNDLE_IDENTIFIER = app.speedreader; PRODUCT_NAME = "$(TARGET_NAME)"; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SUPPORTS_MACCATALYST = NO; SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2";}; name = Debug; };
+    A10000000000000000000011 = {isa = XCBuildConfiguration; buildSettings = {ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; DEVELOPMENT_ASSET_PATHS = ""; DEVELOPMENT_TEAM = ""; ENABLE_PREVIEWS = YES; CODE_SIGN_ENTITLEMENTS = SpeedReader/SpeedReader.entitlements; GENERATE_INFOPLIST_FILE = YES; INFOPLIST_FILE = SpeedReader/Info.plist; INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES; INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES; INFOPLIST_KEY_UILaunchScreen_Generation = YES; INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"; INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"; MARKETING_VERSION = 1.0; PRODUCT_BUNDLE_IDENTIFIER = app.speedreader; PRODUCT_NAME = "$(TARGET_NAME)"; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SUPPORTS_MACCATALYST = NO; SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2";}; name = Release; };
+    A2000000000000000000162 = {isa = XCBuildConfiguration; buildSettings = {CODE_SIGN_ENTITLEMENTS = ShareExtension/SpeedReaderShareExtension.entitlements; CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; GENERATE_INFOPLIST_FILE = YES; INFOPLIST_FILE = ShareExtension/Info.plist; INFOPLIST_KEY_CFBundleDisplayName = "Speed Reader Share"; MARKETING_VERSION = 1.0; IPHONEOS_DEPLOYMENT_TARGET = 17.0; PRODUCT_BUNDLE_IDENTIFIER = app.speedreader.ShareExtension; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SKIP_INSTALL = YES; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2";}; name = Debug; };
+    A2000000000000000000163 = {isa = XCBuildConfiguration; buildSettings = {CODE_SIGN_ENTITLEMENTS = ShareExtension/SpeedReaderShareExtension.entitlements; CODE_SIGN_STYLE = Automatic; CURRENT_PROJECT_VERSION = 1; GENERATE_INFOPLIST_FILE = YES; INFOPLIST_FILE = ShareExtension/Info.plist; INFOPLIST_KEY_CFBundleDisplayName = "Speed Reader Share"; MARKETING_VERSION = 1.0; IPHONEOS_DEPLOYMENT_TARGET = 17.0; PRODUCT_BUNDLE_IDENTIFIER = app.speedreader.ShareExtension; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SKIP_INSTALL = YES; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2";}; name = Release; };
+    A2000000000000000000161 = {isa = XCConfigurationList; buildConfigurations = (A2000000000000000000162, A2000000000000000000163); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+    A1000000000000000000000D = {isa = XCConfigurationList; buildConfigurations = (A1000000000000000000000E, A1000000000000000000000F); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+    A1000000000000000000000A = {isa = XCConfigurationList; buildConfigurations = (A10000000000000000000010, A10000000000000000000011); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+  };
+  rootObject = A1000000000000000000000C;
+}

@@ -1,0 +1,89 @@
+/* Russian UI strings. Keys are the English source strings. */
+
+"Resume reading?" = "Продолжить чтение?";
+"Start Fresh" = "Начать сначала";
+"Resume" = "Продолжить";
+"You have a saved session at word %d of %d.\nSaved %@" = "Сохранённая сессия: слово %d из %d.\nСохранено %@";
+"Could not open file" = "Не удалось открыть файл";
+"OK" = "ОК";
+"Jump to position" = "Перейти к позиции";
+"Save progress" = "Сохранить прогресс";
+"Load content" = "Загрузить текст";
+"Settings" = "Настройки";
+"Library" = "Библиотека";
+"Current word: %@" = "Текущее слово: %@";
+"Double tap to play or pause" = "Двойное касание — чтение или пауза";
+
+"Play" = "Читать";
+"Pause" = "Пауза";
+"Stop" = "Стоп";
+"Restart" = "Сначала";
+"Repeat sentence" = "Повторить предложение";
+"Back 5 words" = "Назад на 5 слов";
+"Forward 5 words" = "Вперёд на 5 слов";
+
+"Done" = "Готово";
+"Speed" = "Скорость";
+"words/min" = "слов/мин";
+"Lower WPM for longer words" = "Замедление на длинных словах";
+"Percentage points each extra letter adds to the pause" = "Насколько растёт пауза за каждую лишнюю букву";
+"Display" = "Отображение";
+"Words shown simultaneously" = "Слов на экране";
+"Odd numbers (1, 3, 5, 7) center the highlight best" = "Нечётные числа (1, 3, 5, 7) лучше центрируют подсветку";
+"Effects" = "Эффекты";
+"Word fade" = "Затухание слова";
+"Duration" = "Длительность";
+"Pauses" = "Паузы";
+"Pause on punctuation" = "Пауза на знаках препинания";
+"Pause multiplier" = "Множитель паузы";
+"Pause every N words" = "Пауза каждые N слов";
+"Off" = "Выкл";
+"Pause duration" = "Длительность паузы";
+
+"Load Content" = "Загрузка текста";
+"Cancel" = "Отмена";
+"Load Text" = "Загрузить";
+"Paste or type your text" = "Вставьте или введите текст";
+"Import a document" = "Импорт документа";
+"Upload PDF, EPUB, TXT, FB2 or DOCX" = "Выбрать PDF, EPUB, TXT, FB2 или DOCX";
+"Extracted text replaces the editor content." = "Извлечённый текст заменит содержимое редактора.";
+"Loading…" = "Загрузка…";
+"Loading %@…" = "Загрузка %@…";
+
+"Enter word number (e.g., 150) or percentage (e.g., 50%)" = "Введите номер слова (напр. 150) или процент (напр. 50%)";
+"Word # or %" = "Слово № или %";
+"Go" = "Перейти";
+"Start" = "Начало";
+
+"Reading statistics" = "Статистика чтения";
+"Today" = "Сегодня";
+"Last 7 days" = "За 7 дней";
+"All time" = "Всего";
+"Documents" = "Документы";
+"Documents you import or read appear here with their position." = "Импортированные и прочитанные документы появляются здесь вместе с позицией чтения.";
+"words: %d" = "слов: %d";
+"words" = "слов";
+
+"Word size" = "Размер слова";
+"Reading orientation" = "Ориентация чтения";
+"Auto" = "Авто";
+"Portrait" = "Вертикально";
+"Landscape" = "Горизонтально";
+"Background" = "Фон";
+"Black" = "Чёрный";
+"Charcoal" = "Тёмно-серый";
+"Navy" = "Тёмно-синий";
+"Sepia" = "Сепия";
+"White" = "Белый";
+
+"Language" = "Язык";
+"System" = "Как в системе";
+"English" = "English";
+"Русский" = "Русский";
+"Restart the app for the language to apply" = "Перезапустите приложение, чтобы язык изменился";
+"Unsupported file type: %@. Use PDF, EPUB, TXT, FB2 or DOCX." = "Неподдерживаемый тип файла: %@. Используйте PDF, EPUB, TXT, FB2 или DOCX.";
+"Could not read the %@ file." = "Не удалось прочитать файл %@.";
+"META-INF/container.xml not found in EPUB" = "Файл META-INF/container.xml не найден в EPUB";
+"No rootfile declared in EPUB container" = "В контейнере EPUB не объявлен rootfile";
+"EPUB package (OPF) could not be parsed" = "Не удалось разобрать пакет EPUB (OPF)";
+"word/document.xml not found in DOCX" = "Файл word/document.xml не найден в DOCX";

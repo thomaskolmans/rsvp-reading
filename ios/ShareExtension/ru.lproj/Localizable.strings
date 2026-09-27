@@ -1,0 +1,7 @@
+/* Russian UI strings for the Share Extension. */
+
+"Processing…" = "Обработка…";
+"Open in Speed Reader" = "Открыть в Speed Reader";
+"Done" = "Готово";
+"No readable text found." = "Читаемый текст не найден.";
+"Saved %d words to Speed Reader." = "Сохранено слов: %d. Откройте Speed Reader.";

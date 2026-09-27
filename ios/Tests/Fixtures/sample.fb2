@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<FictionBook xmlns="http://www.gribuser.ru/xml/fictionbook/2.0">
+  <description>
+    <title-info><book-title>Sample</book-title></title-info>
+  </description>
+  <body>
+    <section>
+      <title><p>Глава первая.</p></title>
+      <p>Это книга в формате FictionBook.</p>
+    </section>
+  </body>
+</FictionBook>
