@@ -1,7 +1,8 @@
 {
-  "name": "rsvp",
+  "name": "speed-reader",
   "private": true,
   "version": "1.0.1",
+  "description": "Focused speed reading — one word at a time at a fixed focal point.",
   "type": "module",
   "scripts": {
     "dev": "vite",

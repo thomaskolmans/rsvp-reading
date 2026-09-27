@@ -76,12 +76,25 @@
 
 <style>
   .text-input-panel {
-    background: #111;
-    border: 1px solid #333;
-    border-radius: 12px;
+    background: linear-gradient(180deg, rgba(10, 13, 24, 0.94), rgba(17, 22, 40, 0.94));
+    border: 1px solid var(--line-1);
+    border-radius: 20px;
     padding: 1.5rem;
     width: 100%;
     max-width: 500px;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+    animation: panel-in 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
   }
 
   .panel-header {
@@ -93,28 +106,31 @@
 
   h3 {
     margin: 0;
-    font-weight: 500;
-    color: #fff;
-    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-1);
+    font-size: 1.2rem;
   }
 
   .close-icon {
-    background: transparent;
-    border: none;
-    color: #666;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--line-1);
+    color: var(--text-3);
     cursor: pointer;
-    padding: 0.25rem;
+    padding: 0.4rem;
     display: flex;
-    transition: color 0.2s;
+    border-radius: 9px;
+    transition: all 0.2s;
   }
 
   .close-icon:hover {
-    color: #fff;
+    color: var(--text-1);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--line-2);
   }
 
   .close-icon svg {
-    width: 20px;
-    height: 20px;
+    width: 19px;
+    height: 19px;
   }
 
   .hidden-input {
@@ -132,19 +148,21 @@
     justify-content: center;
     gap: 0.75rem;
     padding: 1rem;
-    background: #1a1a1a;
-    border: 2px dashed #444;
-    border-radius: 8px;
-    color: #aaa;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1.5px dashed var(--line-2);
+    border-radius: 14px;
+    color: var(--text-2);
     font-size: 1rem;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.25s;
   }
 
   .upload-btn:hover:not(:disabled) {
-    border-color: #ff4444;
-    color: #fff;
-    background: #222;
+    border-color: var(--accent);
+    color: var(--text-1);
+    background: rgba(255, 59, 92, 0.08);
+    box-shadow: 0 0 20px var(--glow-ui);
+    transform: translateY(-1px);
   }
 
   .upload-btn:disabled {
@@ -159,16 +177,17 @@
 
   .loading-message {
     margin: 0.75rem 0 0;
-    color: #ff4444;
+    color: var(--accent);
     font-size: 0.9rem;
     text-align: center;
+    text-shadow: 0 0 10px var(--glow-ui);
   }
 
   .divider {
     display: flex;
     align-items: center;
     margin: 1.25rem 0;
-    color: #555;
+    color: var(--text-3);
     font-size: 0.85rem;
   }
 
@@ -177,7 +196,7 @@
     content: '';
     flex: 1;
     height: 1px;
-    background: #333;
+    background: var(--line-1);
   }
 
   .divider span {
@@ -186,21 +205,23 @@
 
   textarea {
     width: 100%;
-    background: #1a1a1a;
-    border: 1px solid #333;
-    border-radius: 8px;
-    color: #fff;
+    background: rgba(255, 255, 255, 0.045);
+    border: 1px solid var(--line-2);
+    border-radius: 12px;
+    color: var(--text-1);
     padding: 1rem;
     font-size: 0.95rem;
     font-family: inherit;
     resize: vertical;
     box-sizing: border-box;
     min-height: 120px;
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
 
   textarea:focus {
     outline: none;
-    border-color: #555;
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.05);
   }
 
   textarea:disabled {
@@ -216,7 +237,7 @@
   .panel-actions button {
     flex: 1;
     padding: 0.75rem 1rem;
-    border-radius: 8px;
+    border-radius: 12px;
     font-size: 0.95rem;
     font-weight: 500;
     cursor: pointer;
@@ -224,24 +245,26 @@
   }
 
   .btn-secondary {
-    background: #222;
-    border: 1px solid #444;
-    color: #aaa;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--line-2);
+    color: var(--text-2);
   }
 
   .btn-secondary:hover {
-    background: #333;
-    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-1);
   }
 
   .btn-primary {
-    background: #ff4444;
+    background: linear-gradient(135deg, var(--accent-2), var(--accent));
     border: none;
     color: #fff;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), 0 0 14px var(--glow-ui);
   }
 
   .btn-primary:hover:not(:disabled) {
-    background: #ff5555;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4), 0 0 22px var(--glow-ui-strong);
+    transform: translateY(-1px);
   }
 
   .btn-primary:disabled {
@@ -253,7 +276,7 @@
     .text-input-panel {
       max-width: 100%;
       padding: 1rem;
-      border-radius: 8px;
+      border-radius: 14px;
     }
 
     textarea {
@@ -264,6 +287,12 @@
     .upload-btn {
       padding: 0.875rem;
       font-size: 0.9rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .text-input-panel {
+      animation: none;
     }
   }
 </style>

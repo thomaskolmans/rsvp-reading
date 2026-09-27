@@ -4,9 +4,12 @@
     parseText as parseTextUtil,
     getWordDelay as getWordDelayUtil,
     formatTimeRemaining,
-    shouldPauseAtWord
-  } from './lib/rsvp-utils.js';
+    shouldPauseAtWord,
+    extractWordFrame
+  } from './lib/reading-utils.js';
   import { parseFile } from './lib/file-parsers.js';
+  import { getFontStack } from './lib/fonts.js';
+  import { buildSettingsPayload, mergeSettings } from './lib/settings-utils.js';
   import {
     saveSession,
     loadSession,
@@ -14,16 +17,15 @@
     hasSession,
     getSessionSummary
   } from './lib/progress-storage.js';
-  import RSVPDisplay from './lib/components/RSVPDisplay.svelte';
+  import WordStage from './lib/components/WordStage.svelte';
   import Controls from './lib/components/Controls.svelte';
   import Settings from './lib/components/Settings.svelte';
   import TextInput from './lib/components/TextInput.svelte';
   import ProgressBar from './lib/components/ProgressBar.svelte';
-  import { extractWordFrame } from './lib/rsvp-utils.js';
 
   // State
   let frameWordCount = 1;
-  let text = `Rapid serial visual presentation (RSVP) is a scientific method for studying the timing of vision. In RSVP, a sequence of stimuli is shown to an observer at one location in their visual field. This technique has been adapted for speed reading applications, where words are displayed one at a time at a fixed point, eliminating the need for eye movements and potentially increasing reading speed significantly.`;
+  let text = `Focused reading is a skill of attention, not just speed. When words appear one at a time at a fixed point on the screen, your eyes stop scanning and your mind settles into a steady rhythm. Start slower than feels comfortable. Let the red letter anchor your gaze. Trust the rhythm even when it feels fast. Speed is a habit, and habits are built one word at a time.`;
   let words = [];
   let currentWordIndex = 0;
   let isPlaying = false;
@@ -48,6 +50,16 @@
   let punctuationPauseMultiplier = 2;
   let wordLengthWPMMultiplier = 5;
 
+  // Visual effects
+  let glowEnabled = true;
+  let glowBackground = true;
+  let glowFocus = true;
+  let glowInterface = true;
+  let patternEnabled = false;
+
+  // Typography
+  let fontChoice = 'sans';
+
   // Animation
   let wordOpacity = 1;
   let intervalId = null;
@@ -67,6 +79,12 @@
 
   function getWordDelay(word) {
     return getWordDelayUtil(word, wordsPerMinute, pauseOnPunctuation, punctuationPauseMultiplier, wordLengthWPMMultiplier);
+  }
+
+  // Map a glow gate to a CSS token value: keeps the glow when enabled,
+  // makes it transparent (invisible) when disabled.
+  function glowGate(enabled, token) {
+    return enabled ? `var(${token})` : 'transparent';
   }
 
   function showNextWord() {
@@ -183,7 +201,7 @@
       text,
       currentWordIndex,
       totalWords: words.length,
-      settings: {
+      settings: buildSettingsPayload({
         wordsPerMinute,
         fadeEnabled,
         fadeDuration,
@@ -192,8 +210,14 @@
         wordLengthWPMMultiplier,
         pauseAfterWords,
         pauseDuration,
-        frameWordCount
-      }
+        frameWordCount,
+        glowEnabled,
+        glowBackground,
+        glowFocus,
+        glowInterface,
+        patternEnabled,
+        fontChoice
+      })
     });
   }
 
@@ -207,15 +231,38 @@
     progress = (currentWordIndex / words.length) * 100;
 
     if (session.settings) {
-      wordsPerMinute = session.settings.wordsPerMinute ?? wordsPerMinute;
-      fadeEnabled = session.settings.fadeEnabled ?? fadeEnabled;
-      fadeDuration = session.settings.fadeDuration ?? fadeDuration;
-      pauseOnPunctuation = session.settings.pauseOnPunctuation ?? pauseOnPunctuation;
-      punctuationPauseMultiplier = session.settings.punctuationPauseMultiplier ?? punctuationPauseMultiplier;
-      wordLengthWPMMultiplier = session.settings.wordLengthWPMMultiplier ?? wordLengthWPMMultiplier;
-      pauseAfterWords = session.settings.pauseAfterWords ?? pauseAfterWords;
-      pauseDuration = session.settings.pauseDuration ?? pauseDuration;
-      frameWordCount = session.settings.frameWordCount ?? frameWordCount;
+      const restored = mergeSettings(session.settings, {
+        wordsPerMinute,
+        fadeEnabled,
+        fadeDuration,
+        pauseOnPunctuation,
+        punctuationPauseMultiplier,
+        wordLengthWPMMultiplier,
+        pauseAfterWords,
+        pauseDuration,
+        frameWordCount,
+        glowEnabled,
+        glowBackground,
+        glowFocus,
+        glowInterface,
+        patternEnabled,
+        fontChoice
+      });
+      wordsPerMinute = restored.wordsPerMinute;
+      fadeEnabled = restored.fadeEnabled;
+      fadeDuration = restored.fadeDuration;
+      pauseOnPunctuation = restored.pauseOnPunctuation;
+      punctuationPauseMultiplier = restored.punctuationPauseMultiplier;
+      wordLengthWPMMultiplier = restored.wordLengthWPMMultiplier;
+      pauseAfterWords = restored.pauseAfterWords;
+      pauseDuration = restored.pauseDuration;
+      frameWordCount = restored.frameWordCount;
+      glowEnabled = restored.glowEnabled;
+      glowBackground = restored.glowBackground;
+      glowFocus = restored.glowFocus;
+      glowInterface = restored.glowInterface;
+      patternEnabled = restored.patternEnabled;
+      fontChoice = restored.fontChoice;
     }
 
     showSavedSessionPrompt = false;
@@ -348,11 +395,32 @@
   });
 </script>
 
-<main class:focus-mode={isFocusMode}>
+<main
+  class:focus-mode={isFocusMode}
+  style="
+    --glow-word: {glowGate(glowEnabled && glowFocus, '--accent-glow')};
+    --glow-ui: {glowGate(glowEnabled && glowInterface, '--accent-glow')};
+    --glow-ui-strong: {glowGate(glowEnabled && glowInterface, '--accent-glow-strong')};
+    --glow-amber: {glowGate(glowEnabled && glowInterface, '--amber-glow')};
+    --glow-amber-strong: {glowGate(glowEnabled && glowInterface, '--amber-glow-strong')};
+    --glow-ambient: {glowEnabled && glowBackground ? 1 : 0};
+    --font-reading: {getFontStack(fontChoice)};
+  "
+>
+  <!-- Ambient backdrop -->
+  <div class="backdrop" aria-hidden="true">
+    <div class="orb orb-a"></div>
+    <div class="orb orb-b"></div>
+  </div>
+
   <!-- Header - hidden during focus mode -->
   {#if !isFocusMode}
     <header>
-      <h1>RSVP Reader</h1>
+      <h1 class="brand">
+        <span class="brand-dot" aria-hidden="true"></span>
+        <span class="brand-name">Speed</span>
+        <span class="brand-sub">Reader</span>
+      </h1>
       <div class="header-actions">
         <button
           class="icon-btn"
@@ -425,6 +493,13 @@
         bind:pauseAfterWords
         bind:pauseDuration
         bind:frameWordCount
+        bind:glowEnabled
+        bind:glowBackground
+        bind:glowFocus
+        bind:glowInterface
+        bind:patternEnabled
+        bind:fontChoice
+        on:save={saveCurrentSession}
         on:close={() => showSettings = false}
       />
     </div>
@@ -474,7 +549,7 @@
 
   <!-- Main Display -->
   <div class="display-area">
-    <RSVPDisplay
+    <WordStage
       word={currentWord}
       wordGroup={wordFrame.subset}
       highlightIndex={wordFrame.centerOffset}
@@ -482,6 +557,7 @@
       {fadeDuration}
       {fadeEnabled}
       multiWordEnabled={frameWordCount > 1}
+      patternEnabled={glowEnabled && patternEnabled}
     />
   </div>
 
@@ -514,12 +590,12 @@
 
     {#if !isFocusMode}
       <div class="shortcuts desktop-only">
-        <kbd>Space</kbd> Play
-        <kbd>Esc</kbd> Exit
-        <kbd>↑↓</kbd> Speed
-        <kbd>←→</kbd> Skip
-        <kbd>G</kbd> Jump
-        <kbd>Ctrl+S</kbd> Save
+        <span class="shortcut"><kbd>Space</kbd> Play</span>
+        <span class="shortcut"><kbd>Esc</kbd> Exit</span>
+        <span class="shortcut"><kbd>↑↓</kbd> Speed</span>
+        <span class="shortcut"><kbd>←→</kbd> Skip</span>
+        <span class="shortcut"><kbd>G</kbd> Jump</span>
+        <span class="shortcut"><kbd>Ctrl+S</kbd> Save</span>
       </div>
       <div class="touch-controls mobile-only">
         <button class="touch-btn" on:click={() => currentWordIndex = Math.max(0, currentWordIndex - 5)} title="Back 5 words">
@@ -542,7 +618,7 @@
 
 <style>
   :global(body) {
-    background-color: #000 !important;
+    background-color: transparent !important;
     margin: 0;
     padding: 0;
     overflow: hidden;
@@ -556,9 +632,10 @@
     height: 100dvh; /* Dynamic viewport height for mobile */
     display: flex;
     flex-direction: column;
-    background-color: #000;
-    color: #fff;
-    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: transparent;
+    color: var(--text-1);
+    font-family: 'SF Pro Text', 'Inter', 'Segoe UI', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
     padding: 2rem;
     box-sizing: border-box;
     transition: padding 0.3s ease;
@@ -569,7 +646,54 @@
     padding: 1rem;
   }
 
+  /* ── Ambient backdrop ─────────────────────────────────────── */
+  .backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: var(--glow-ambient, 1);
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  .orb-a {
+    width: 55vmax;
+    height: 55vmax;
+    left: -18vmax;
+    top: -22vmax;
+    background: radial-gradient(circle, rgba(64, 82, 180, 0.16) 0%, rgba(64, 82, 180, 0.05) 40%, transparent 70%);
+    animation: orb-drift-a 70s ease-in-out infinite alternate;
+  }
+
+  .orb-b {
+    width: 45vmax;
+    height: 45vmax;
+    right: -16vmax;
+    bottom: -20vmax;
+    background: radial-gradient(circle, rgba(255, 59, 92, 0.07) 0%, transparent 65%);
+    animation: orb-drift-b 90s ease-in-out infinite alternate;
+  }
+
+  @keyframes orb-drift-a {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(6vmax, 4vmax, 0); }
+  }
+
+  @keyframes orb-drift-b {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(-5vmax, -3vmax, 0); }
+  }
+
   header {
+    position: relative;
+    z-index: 1;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -577,11 +701,34 @@
     flex-shrink: 0;
   }
 
-  h1 {
-    font-size: 1.25rem;
-    font-weight: 400;
-    color: #555;
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     margin: 0;
+  }
+
+  .brand-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--glow-ui-strong);
+  }
+
+  .brand-name {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: var(--text-1);
+    font-family: var(--font-mono);
+  }
+
+  .brand-sub {
+    font-size: 1.05rem;
+    font-weight: 400;
+    color: var(--text-3);
+    letter-spacing: 0.08em;
   }
 
   .header-actions {
@@ -590,11 +737,13 @@
   }
 
   .icon-btn {
-    background: transparent;
-    border: 1px solid #333;
-    color: #555;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--line-2);
+    color: var(--text-2);
+    width: 40px;
+    height: 40px;
     padding: 0.5rem;
-    border-radius: 8px;
+    border-radius: 12px;
     cursor: pointer;
     transition: all 0.2s;
     display: flex;
@@ -602,14 +751,19 @@
     justify-content: center;
   }
 
-  .icon-btn:hover {
-    border-color: #555;
-    color: #fff;
+  .icon-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(255, 255, 255, 0.26);
+    color: var(--text-1);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
   }
 
   .icon-btn.active {
-    border-color: #ff4444;
-    color: #ff4444;
+    background: rgba(255, 59, 92, 0.14);
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 0 16px var(--glow-ui);
   }
 
   .icon-btn svg {
@@ -617,21 +771,37 @@
     height: 20px;
   }
 
+  .icon-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  /* ── Overlays & panels ────────────────────────────────────── */
   .panel-overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(4, 6, 12, 0.72);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 100;
     padding: 2rem;
+    animation: overlay-in 0.18s ease-out;
+  }
+
+  @keyframes overlay-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 
   .display-area {
+    position: relative;
+    z-index: 1;
     flex: 1;
     display: flex;
     align-items: center;
@@ -641,6 +811,8 @@
   }
 
   .bottom-bar {
+    position: relative;
+    z-index: 1;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
@@ -663,17 +835,26 @@
     display: flex;
     justify-content: center;
     gap: 1.5rem;
-    color: #444;
+    color: var(--text-3);
     font-size: 0.8rem;
   }
 
+  .shortcut {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
   kbd {
-    background: #1a1a1a;
-    padding: 0.15rem 0.4rem;
-    border-radius: 3px;
-    font-family: monospace;
-    color: #666;
-    margin-right: 0.25rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--line-2);
+    border-bottom-color: rgba(255, 255, 255, 0.28);
+    padding: 0.14rem 0.45rem;
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-2);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
   }
 
   /* Touch controls for mobile */
@@ -685,11 +866,11 @@
   }
 
   .touch-btn {
-    background: #1a1a1a;
-    border: 1px solid #333;
-    color: #888;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--line-2);
+    color: var(--text-2);
     padding: 0.5rem 0.75rem;
-    border-radius: 6px;
+    border-radius: 10px;
     font-size: 0.75rem;
     cursor: pointer;
     min-width: 44px;
@@ -701,8 +882,9 @@
   }
 
   .touch-btn:active {
-    background: #333;
-    color: #fff;
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--text-1);
+    transform: scale(0.94);
   }
 
   .touch-btn svg {
@@ -711,11 +893,13 @@
   }
 
   .wpm-display {
-    color: #ff4444;
-    font-family: monospace;
+    color: var(--accent);
+    font-family: var(--font-mono);
     font-size: 0.85rem;
     min-width: 3rem;
     text-align: center;
+    text-shadow: 0 0 10px var(--glow-ui);
+    font-variant-numeric: tabular-nums;
   }
 
   .mobile-only {
@@ -749,45 +933,61 @@
     }
   }
 
-  /* Jump to panel */
+  /* Jump to panel & saved session panel */
   .jump-to-panel,
   .saved-session-panel {
-    background: #1a1a1a;
-    border: 1px solid #333;
-    border-radius: 12px;
+    background: linear-gradient(180deg, rgba(10, 13, 24, 0.94), rgba(17, 22, 40, 0.94));
+    border: 1px solid var(--line-1);
+    border-radius: 20px;
     padding: 1.5rem;
     max-width: 320px;
     width: 100%;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+    animation: panel-in 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(0.97);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
   }
 
   .jump-to-panel h3,
   .saved-session-panel h3 {
     margin: 0 0 0.5rem 0;
-    color: #fff;
+    color: var(--text-1);
     font-size: 1.1rem;
+    font-weight: 600;
   }
 
   .jump-hint {
-    color: #666;
+    color: var(--text-3);
     font-size: 0.85rem;
     margin: 0 0 1rem 0;
   }
 
   .jump-to-panel input {
     width: 100%;
-    padding: 0.75rem;
-    background: #111;
-    border: 1px solid #333;
-    border-radius: 6px;
-    color: #fff;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--line-2);
+    border-radius: 10px;
+    color: var(--text-1);
     font-size: 1rem;
     margin-bottom: 1rem;
     box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
 
   .jump-to-panel input:focus {
     outline: none;
-    border-color: #ff4444;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(255, 59, 92, 0.15), 0 0 14px var(--glow-ui);
   }
 
   .jump-actions,
@@ -800,33 +1000,38 @@
   .jump-actions button,
   .session-actions button {
     padding: 0.5rem 1rem;
-    border-radius: 6px;
+    border-radius: 10px;
     border: none;
     cursor: pointer;
     font-size: 0.9rem;
+    font-weight: 500;
     transition: all 0.2s;
   }
 
   .jump-actions button.primary,
   .session-actions button.primary {
-    background: #ff4444;
+    background: linear-gradient(135deg, var(--accent-2), var(--accent));
     color: #fff;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), 0 0 14px var(--glow-ui);
   }
 
   .jump-actions button.primary:hover,
   .session-actions button.primary:hover {
-    background: #ff6666;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4), 0 0 22px var(--glow-ui-strong);
+    transform: translateY(-1px);
   }
 
   .jump-actions button.secondary,
   .session-actions button.secondary {
-    background: #333;
-    color: #fff;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--line-2);
+    color: var(--text-2);
   }
 
   .jump-actions button.secondary:hover,
   .session-actions button.secondary:hover {
-    background: #444;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-1);
   }
 
   .quick-jumps {
@@ -834,39 +1039,47 @@
     gap: 0.5rem;
     margin-top: 1rem;
     padding-top: 1rem;
-    border-top: 1px solid #333;
+    border-top: 1px solid var(--line-1);
   }
 
   .quick-jumps button {
     flex: 1;
     padding: 0.5rem;
-    background: #222;
-    border: 1px solid #333;
-    border-radius: 4px;
-    color: #888;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--line-1);
+    border-radius: 8px;
+    color: var(--text-3);
     cursor: pointer;
     font-size: 0.8rem;
     transition: all 0.2s;
   }
 
   .quick-jumps button:hover {
-    background: #333;
-    color: #fff;
+    background: rgba(255, 255, 255, 0.09);
+    border-color: var(--line-2);
+    color: var(--text-1);
   }
 
   .saved-session-panel p {
     margin: 0.5rem 0;
-    color: #ccc;
+    color: var(--text-2);
   }
 
   .saved-session-panel .saved-time {
-    color: #666;
+    color: var(--text-3);
     font-size: 0.85rem;
     margin-bottom: 1rem;
   }
 
-  .icon-btn:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
+  @media (prefers-reduced-motion: reduce) {
+    .orb {
+      animation: none;
+    }
+
+    .panel-overlay,
+    .jump-to-panel,
+    .saved-session-panel {
+      animation: none;
+    }
   }
 </style>

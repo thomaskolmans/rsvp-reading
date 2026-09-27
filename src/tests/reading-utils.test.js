@@ -3,12 +3,13 @@ import {
   parseText,
   getORPIndex,
   getActualORPIndex,
+  getWordFontSize,
   getWordDelay,
   formatTimeRemaining,
   splitWordForDisplay,
   shouldPauseAtWord,
   extractWordFrame
-} from '../lib/rsvp-utils.js'
+} from '../lib/reading-utils.js'
 
 describe('parseText', () => {
   it('should split text into words', () => {
@@ -46,35 +47,42 @@ describe('parseText', () => {
 })
 
 describe('getORPIndex', () => {
-  it('should return 0 for single letter words', () => {
+it('should return 0 for 1-2 letter words', () => {
     expect(getORPIndex('a')).toBe(0)
     expect(getORPIndex('I')).toBe(0)
-  })
-
-  it('should return 0 for 2-3 letter words', () => {
     expect(getORPIndex('to')).toBe(0)
-    expect(getORPIndex('the')).toBe(0)
-    expect(getORPIndex('cat')).toBe(0)
   })
 
-  it('should return 1 for 4-5 letter words', () => {
+  it('should pick the middle letter for 3-letter words', () => {
+    expect(getORPIndex('the')).toBe(1)
+    expect(getORPIndex('cat')).toBe(1)
+  })
+
+  it('should pick the middle letter for 4-5 letter words', () => {
     expect(getORPIndex('word')).toBe(1)
-    expect(getORPIndex('hello')).toBe(1)
+    expect(getORPIndex('hello')).toBe(2)
   })
 
-  it('should return 2 for 6-9 letter words', () => {
-    expect(getORPIndex('reading')).toBe(2)
-    expect(getORPIndex('beautiful')).toBe(2)
+  it('should pick the middle letter for 6-9 letter words', () => {
+    expect(getORPIndex('reading')).toBe(3)
+    expect(getORPIndex('beautiful')).toBe(4)
   })
 
-  it('should return 3 for 10+ letter words', () => {
-    expect(getORPIndex('interesting')).toBe(3)
-    expect(getORPIndex('presentation')).toBe(3)
+  it('should pick the middle letter for 10+ letter words', () => {
+    expect(getORPIndex('interesting')).toBe(5)
+    expect(getORPIndex('presentation')).toBe(5)
+  })
+
+  it('should pick a central letter for very long words', () => {
+    // 13 letters -> exactly the 7th (index 6)
+    expect(getORPIndex('international')).toBe(6)
+    // 20 letters -> index 9
+    expect(getORPIndex('supercalifragilistic')).toBe(9)
   })
 
   it('should ignore non-letter characters when counting', () => {
-    expect(getORPIndex("don't")).toBe(1) // 5 letters: d-o-n-t
-    expect(getORPIndex('e-mail')).toBe(1) // 5 letters: e-m-a-i-l
+    expect(getORPIndex("don't")).toBe(1) // 4 letters: d-o-n-t
+    expect(getORPIndex('e-mail')).toBe(2) // 5 letters: e-m-a-i-l
   })
 
   it('should return 0 for empty/null input', () => {
@@ -87,31 +95,31 @@ describe('getORPIndex', () => {
   it('should handle French accented characters', () => {
     expect(getORPIndex('café')).toBe(1)      // 4 letters
     expect(getORPIndex('résumé')).toBe(2)    // 6 letters
-    expect(getORPIndex('français')).toBe(2)  // 8 letters
+    expect(getORPIndex('français')).toBe(3)  // 8 letters
   })
 
   it('should handle Spanish characters', () => {
     expect(getORPIndex('niño')).toBe(1)      // 4 letters
     expect(getORPIndex('mañana')).toBe(2)    // 6 letters
-    expect(getORPIndex('español')).toBe(2)   // 7 letters
+    expect(getORPIndex('español')).toBe(3)   // 7 letters
   })
 
   it('should handle German characters', () => {
     expect(getORPIndex('über')).toBe(1)      // 4 letters
-    expect(getORPIndex('größe')).toBe(1)     // 5 letters
-    expect(getORPIndex('Mädchen')).toBe(2)   // 7 letters
+    expect(getORPIndex('größe')).toBe(2)     // 5 letters
+    expect(getORPIndex('Mädchen')).toBe(3)   // 7 letters
   })
 
   it('should handle Cyrillic (Russian)', () => {
-    expect(getORPIndex('мир')).toBe(0)       // 3 letters
-    expect(getORPIndex('слово')).toBe(1)     // 5 letters
+    expect(getORPIndex('мир')).toBe(1)       // 3 letters
+    expect(getORPIndex('слово')).toBe(2)     // 5 letters
     expect(getORPIndex('привет')).toBe(2)    // 6 letters
   })
 
   it('should handle Greek', () => {
-    expect(getORPIndex('και')).toBe(0)       // 3 letters
-    expect(getORPIndex('λόγος')).toBe(1)     // 5 letters
-    expect(getORPIndex('ελληνικά')).toBe(2)  // 8 letters
+    expect(getORPIndex('και')).toBe(1)       // 3 letters
+    expect(getORPIndex('λόγος')).toBe(2)     // 5 letters
+    expect(getORPIndex('ελληνικά')).toBe(3)  // 8 letters
   })
 
   it('should handle Chinese characters', () => {
@@ -122,28 +130,28 @@ describe('getORPIndex', () => {
 
   it('should handle Japanese', () => {
     expect(getORPIndex('日本')).toBe(0)      // 2 characters
-    expect(getORPIndex('こんにちは')).toBe(1) // 5 characters
+    expect(getORPIndex('こんにちは')).toBe(2) // 5 characters
   })
 
   it('should handle Arabic', () => {
-    expect(getORPIndex('مرحبا')).toBe(1)     // 5 letters
-    expect(getORPIndex('العربية')).toBe(2)   // 7 letters
+    expect(getORPIndex('مرحبا')).toBe(2)     // 5 letters
+    expect(getORPIndex('العربية')).toBe(3)   // 7 letters
   })
 
   it('should handle Hebrew', () => {
-    expect(getORPIndex('שלום')).toBe(1)      // 4 letters
-    expect(getORPIndex('עברית')).toBe(1)     // 5 letters
+    expect(getORPIndex('שלوم')).toBe(1)      // 4 letters
+    expect(getORPIndex('עברית')).toBe(2)     // 5 letters
   })
 })
 
 describe('getActualORPIndex', () => {
-  it('should return correct index for simple words', () => {
-    expect(getActualORPIndex('hello')).toBe(1)
-    expect(getActualORPIndex('cat')).toBe(0)
+  it('should return the middle letter index for simple words', () => {
+    expect(getActualORPIndex('hello')).toBe(2) // 5 letters -> 'l'
+    expect(getActualORPIndex('cat')).toBe(1)   // 3 letters -> 'a'
   })
 
   it('should skip leading punctuation', () => {
-    expect(getActualORPIndex('"hello')).toBe(2) // Skip " to get to 'e'
+    expect(getActualORPIndex('"hello')).toBe(3) // Skip " to get to 'l'
     expect(getActualORPIndex('(test')).toBe(2)  // Skip ( to get to 'e'
   })
 
@@ -171,7 +179,7 @@ describe('getActualORPIndex', () => {
 
   it('should handle Cyrillic words', () => {
     expect(getActualORPIndex('привет')).toBe(2)    // 'и' is ORP
-    expect(getActualORPIndex('мир')).toBe(0)       // 'м' is ORP
+    expect(getActualORPIndex('мир')).toBe(1)       // middle letter 'и'
   })
 
   it('should handle CJK characters', () => {
@@ -277,16 +285,16 @@ describe('formatTimeRemaining', () => {
 })
 
 describe('splitWordForDisplay', () => {
-  it('should split word at ORP position', () => {
-    // 'hello' has ORP at index 1 (letter 'e')
+  it('should split word at the middle letter', () => {
+    // 'hello' has ORP at index 2 (letter 'l')
     const result = splitWordForDisplay('hello')
-    expect(result).toEqual({ before: 'h', orp: 'e', after: 'llo' })
+    expect(result).toEqual({ before: 'he', orp: 'l', after: 'lo' })
   })
 
   it('should handle short words', () => {
-    // 'cat' has ORP at index 0 (letter 'c')
+    // 'cat' has ORP at index 1 (letter 'a')
     const result = splitWordForDisplay('cat')
-    expect(result).toEqual({ before: '', orp: 'c', after: 'at' })
+    expect(result).toEqual({ before: 'c', orp: 'a', after: 't' })
   })
 
   it('should handle single letter words', () => {
@@ -300,11 +308,36 @@ describe('splitWordForDisplay', () => {
   })
 
   it('should handle words with leading punctuation', () => {
-    // '"hello' - ORP should be on 'e' (second letter)
+    // '"hello' - ORP on the middle letter 'l'
     const result = splitWordForDisplay('"hello')
-    expect(result.orp).toBe('e')
-    expect(result.before).toBe('"h')
-    expect(result.after).toBe('llo')
+    expect(result.orp).toBe('l')
+    expect(result.before).toBe('"he')
+    expect(result.after).toBe('lo')
+  })
+})
+
+describe('getWordFontSize', () => {
+  it('should return null for short words (CSS clamp handles them)', () => {
+    expect(getWordFontSize('hello')).toBeNull()
+    expect(getWordFontSize('beautiful')).toBeNull() // 9 letters
+    expect(getWordFontSize('presentation')).toBe(2.5) // 12 letters: 30 / 12
+    expect(getWordFontSize('international')).toBeCloseTo(30 / 13, 5)
+  })
+
+  it('should shrink long words so they fit a phone screen', () => {
+    expect(getWordFontSize('supercalifragilistic')).toBe(1.5) // 20 letters
+    expect(getWordFontSize('supercalifragilisticexpialidocious')).toBe(1.4) // floor
+  })
+
+  it('should ignore punctuation when counting letters', () => {
+    expect(getWordFontSize("don't")).toBeNull()       // 5 letters
+    expect(getWordFontSize('extraordinary.')).toBeCloseTo(30 / 13, 5)
+  })
+
+  it('should return null for empty/null input', () => {
+    expect(getWordFontSize('')).toBeNull()
+    expect(getWordFontSize(null)).toBeNull()
+    expect(getWordFontSize(undefined)).toBeNull()
   })
 })
 

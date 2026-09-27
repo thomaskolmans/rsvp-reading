@@ -82,9 +82,9 @@ jobs:
       - name: Create release archive
         run: |
           cd dist
-          zip -r ../rsvp-reader-${{ needs.build.outputs.version }}.zip .
+          zip -r ../speed-reader-${{ needs.build.outputs.version }}.zip .
           cd ..
-          tar -czvf rsvp-reader-${{ needs.build.outputs.version }}.tar.gz -C dist .
+          tar -czvf speed-reader-${{ needs.build.outputs.version }}.tar.gz -C dist .
 
       - name: Generate changelog
         id: changelog
@@ -99,7 +99,7 @@ jobs:
           else
             echo "## Initial Release" > CHANGELOG.md
             echo "" >> CHANGELOG.md
-            echo "First release of RSVP Reader" >> CHANGELOG.md
+            echo "First release of Speed Reader" >> CHANGELOG.md
           fi
 
       - name: Create GitHub Release
@@ -108,8 +108,8 @@ jobs:
           name: Release v${{ needs.build.outputs.version }}
           body_path: CHANGELOG.md
           files: |
-            rsvp-reader-${{ needs.build.outputs.version }}.zip
-            rsvp-reader-${{ needs.build.outputs.version }}.tar.gz
+            speed-reader-${{ needs.build.outputs.version }}.zip
+            speed-reader-${{ needs.build.outputs.version }}.tar.gz
           draft: false
           prerelease: ${{ contains(github.ref, '-') }}
         env:
@@ -129,4 +129,4 @@ jobs:
           echo ""
           echo "DigitalOcean App Platform will automatically deploy from the main branch."
           echo ""
-          echo "View your app at: https://rsvp.n0name.eu"
+          echo "View your app at https://spid.reader.app/"

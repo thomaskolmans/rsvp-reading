@@ -1,5 +1,5 @@
 /**
- * RSVP utility functions for text processing and display calculations
+ * Speed reading utilities for text processing and display calculations
  */
 
 /**
@@ -15,7 +15,8 @@ export function parseText(text) {
 /**
  * Calculate the Optimal Recognition Point (ORP) index for a word.
  * The ORP is the character position where the eye naturally focuses when reading.
- * Based on word length, this determines which letter should be highlighted.
+ * The middle letter of the word is chosen ((letterCount - 1) / 2), so the
+ * highlighted letter stays balanced on screen even for very long words.
  * Supports all Unicode letters (Latin, Cyrillic, CJK, Arabic, etc.)
  *
  * @param {string} word - The word to calculate ORP for
@@ -25,11 +26,23 @@ export function getORPIndex(word) {
   if (!word || typeof word !== "string") return 0;
   const len = word.replace(/[^\p{L}]/gu, "").length;
   if (len <= 1) return 0;
-  if (len <= 3) return 0;
-  if (len <= 5) return 1;
-  if (len <= 9) return 2;
-  if (len <= 12) return 3;
-  return Math.floor(Math.log2(len - 1)) + 1;
+  return Math.floor((len - 1) / 2);
+}
+
+/**
+ * Font size in rem for a word so long words stay on screen (web-only helper).
+ * Words up to 10 letters keep the CSS clamp default (null); longer words are
+ * shrunk by 30 / letters so that with a ~0.72em average advance the whole word
+ * fits inside roughly 21.6em (~345px), the usable width of a phone viewport.
+ *
+ * @param {string} word - The word to size
+ * @returns {number|null} Font size in rem, or null to keep the default
+ */
+export function getWordFontSize(word) {
+  if (!word || typeof word !== "string") return null;
+  const len = word.replace(/[^\p{L}]/gu, "").length;
+  if (len <= 10) return null;
+  return Math.max(1.4, 30 / len);
 }
 
 /**

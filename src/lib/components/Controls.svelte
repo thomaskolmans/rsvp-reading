@@ -101,33 +101,35 @@
   .controls {
     display: flex;
     justify-content: center;
-    gap: 1rem;
+    align-items: center;
+    gap: 0.9rem;
   }
 
   .controls.minimal {
-    gap: 0.5rem;
+    gap: 0.75rem;
   }
 
   .control-btn {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
+    padding: 0.65rem 1.4rem;
+    min-height: 44px;
+    font-size: 0.95rem;
+    font-weight: 600;
     border: none;
-    border-radius: 8px;
+    border-radius: 999px;
     cursor: pointer;
-    transition: all 0.2s;
-    font-weight: 500;
-    color: #fff;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
+    color: var(--text-1);
   }
 
   .controls.minimal .control-btn {
-    padding: 0.5rem;
+    padding: 0;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
   }
 
   .control-btn svg {
@@ -136,40 +138,69 @@
   }
 
   .controls.minimal .control-btn svg {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .control-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  .control-btn:active:not(:disabled) {
+    transform: translateY(1px) scale(0.96);
   }
 
   .control-btn:disabled {
-    opacity: 0.3;
+    opacity: 0.35;
     cursor: not-allowed;
   }
 
   .control-btn.play {
-    background: #ff4444;
+    background: linear-gradient(135deg, var(--accent-2), var(--accent));
+    color: #fff;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.12),
+      0 6px 20px rgba(0, 0, 0, 0.4),
+      0 0 18px var(--glow-ui);
   }
 
   .control-btn.play:hover:not(:disabled) {
-    background: #ff6666;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.16),
+      0 8px 26px rgba(0, 0, 0, 0.45),
+      0 0 28px var(--glow-ui-strong);
   }
 
   .control-btn.pause {
-    background: #ffaa00;
-    color: #000;
+    background: linear-gradient(135deg, #ffcf6e, #ff9f2e);
+    color: #2b1d00;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.12),
+      0 6px 20px rgba(0, 0, 0, 0.4),
+      0 0 18px var(--glow-amber);
   }
 
   .control-btn.pause:hover {
-    background: #ffcc44;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.16),
+      0 8px 26px rgba(0, 0, 0, 0.45),
+      0 0 28px var(--glow-amber-strong);
   }
 
   .control-btn.stop,
   .control-btn.restart {
-    background: #333;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--line-2);
+    color: var(--text-2);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
   }
 
   .control-btn.stop:hover:not(:disabled),
   .control-btn.restart:hover:not(:disabled) {
-    background: #444;
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.28);
+    color: var(--text-1);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
   }
 
   @media (max-width: 600px) {
@@ -187,8 +218,8 @@
     }
 
     .controls.minimal .control-btn {
-      width: 48px;
-      height: 48px;
+      width: 52px;
+      height: 52px;
     }
   }
 </style>

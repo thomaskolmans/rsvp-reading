@@ -1,5 +1,5 @@
 services:
-  rsvp:
+  speed-reader:
     build:
       context: ..
       dockerfile: docker/Dockerfile

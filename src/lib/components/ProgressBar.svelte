@@ -43,6 +43,7 @@
   <div
     class="progress-container"
     class:clickable
+    style="--progress: {progress}%"
     role={clickable ? "slider" : undefined}
     tabindex={clickable ? 0 : undefined}
     aria-valuenow={clickable ? Math.round(progress) : undefined}
@@ -70,10 +71,11 @@
   }
 
   .progress-container {
-    height: 3px;
-    background: #222;
-    border-radius: 2px;
-    overflow: hidden;
+    position: relative;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.09);
+    border-radius: 999px;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.6);
   }
 
   .progress-container.clickable {
@@ -84,12 +86,12 @@
 
   .progress-container.clickable:hover,
   .progress-container.clickable:focus {
-    height: 10px;
+    height: 8px;
     outline: none;
   }
 
   .progress-container.clickable:focus-visible {
-    box-shadow: 0 0 0 2px #ff4444;
+    box-shadow: 0 0 0 2px var(--accent), 0 0 14px var(--glow-ui);
   }
 
   .minimal .progress-container {
@@ -98,24 +100,57 @@
 
   .progress-bar {
     height: 100%;
-    background: linear-gradient(90deg, #ff4444, #ff6666);
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--accent-2), var(--accent));
+    box-shadow: 0 0 10px var(--glow-ui);
     transition: width 0.1s linear;
+  }
+
+  /* Glowing position dot, visible while seeking */
+  .progress-container::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: var(--progress, 0%);
+    width: 12px;
+    height: 12px;
+    transform: translate(-50%, -50%) scale(0);
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--glow-ui-strong), 0 0 0 2px var(--accent);
+    transition: transform 0.25s ease;
+  }
+
+  .progress-container.clickable::after {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .progress-container.clickable:hover::after {
+    transform: translate(-50%, -50%) scale(1.35);
+  }
+
+  .minimal .progress-container::after {
+    display: none;
   }
 
   .stats {
     display: flex;
     justify-content: space-between;
-    margin-top: 0.75rem;
+    margin-top: 0.7rem;
     font-size: 0.85rem;
-    color: #555;
+    color: var(--text-3);
   }
 
   .stat {
-    font-family: monospace;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    letter-spacing: 0.02em;
+    font-variant-numeric: tabular-nums;
   }
 
   .wpm {
-    color: #ff4444;
+    color: var(--accent);
+    text-shadow: 0 0 8px var(--glow-ui);
   }
 
   @media (max-width: 600px) {

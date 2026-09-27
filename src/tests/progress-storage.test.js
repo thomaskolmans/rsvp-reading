@@ -119,7 +119,7 @@ describe('progress-storage', () => {
     it('should remove session from localStorage', () => {
       clearSession()
 
-      expect(localStorageMock.removeItem).toHaveBeenCalledWith('rsvp-reading-session')
+      expect(localStorageMock.removeItem).toHaveBeenCalledWith('speed-reading-session')
     })
 
     it('should return true on success', () => {

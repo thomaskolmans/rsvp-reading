@@ -1,12 +1,12 @@
 {
-  "name": "RSVP Reader",
-  "short_name": "RSVP",
-  "description": "Speed reading with Rapid Serial Visual Presentation",
+  "name": "Speed Reader",
+  "short_name": "Speed Reader",
+  "description": "Focused speed reading — one word at a time",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "theme_color": "#000000",
-  "background_color": "#000000",
+  "theme_color": "#04050b",
+  "background_color": "#04050b",
   "icons": [
     {
       "src": "/favicon.svg",

@@ -2,7 +2,7 @@
  * Progress storage utilities for persisting reading sessions
  */
 
-const STORAGE_KEY = 'rsvp-reading-session';
+const STORAGE_KEY = 'speed-reading-session';
 
 /**
  * Save the current reading session to localStorage

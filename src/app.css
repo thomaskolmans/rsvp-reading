@@ -1,37 +1,90 @@
 :root {
-  font-family: 'Segoe UI', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'SF Pro Text', 'Inter', 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #000;
+  color: rgba(255, 255, 255, 0.92);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* ── Design tokens ─────────────────────────────────────────── */
+  --bg-deep: #04050b;
+  --bg-mid: #0a0e1a;
+
+  --surface-1: rgba(16, 20, 36, 0.66);   /* glass panels */
+  --surface-2: rgba(26, 32, 54, 0.5);    /* chips, buttons */
+
+  --line-1: rgba(255, 255, 255, 0.08);
+  --line-2: rgba(255, 255, 255, 0.16);
+
+  --text-1: #f2f5fb;
+  --text-2: #98a2b8;
+  --text-3: #5c6579;
+
+  --accent: #ff3b5c;
+  --accent-2: #ff7a9c;
+  --accent-glow: rgba(255, 59, 92, 0.4);
+  --accent-glow-strong: rgba(255, 59, 92, 0.75);
+
+  /* Glow gates — flipped to "transparent"/0 by Settings to disable effects */
+  --glow-word: var(--accent-glow);
+  --glow-ui: var(--accent-glow);
+  --glow-ui-strong: var(--accent-glow-strong);
+  --glow-amber: rgba(255, 164, 46, 0.4);
+  --glow-amber-strong: rgba(255, 164, 46, 0.6);
+  --glow-ambient: 1;
+
+  --font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Source Code Pro', 'Menlo', 'Consolas', monospace;
+
+  /* ── Reading fonts — switched from Settings → Typography via --font-reading ── */
+  --font-sans: 'SF Pro Text', 'Inter', 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  --font-serif: Georgia, 'Times New Roman', Cambria, 'Palatino Linotype', serif;
+  --font-dyslexic: 'Comic Sans MS', 'Chalkboard', 'Trebuchet MS', Verdana, sans-serif;
+  --font-reading: var(--font-sans);
 }
 
 * {
   box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
 
+html,
 body {
   margin: 0;
   padding: 0;
+}
+
+body {
   min-width: 320px;
   height: 100vh;
   height: 100dvh;
-  background-color: #000;
+  background-image: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-mid) 45%, var(--bg-deep) 100%);
   overflow: hidden;
   position: fixed;
   width: 100%;
 }
 
+::selection {
+  background: rgba(255, 59, 92, 0.32);
+}
+
+::-moz-selection {
+  background: rgba(255, 59, 92, 0.32);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 #app {
   width: 100%;
   height: 100%;
-  background-color: #000;
+  background-color: transparent;
   overflow: hidden;
 }

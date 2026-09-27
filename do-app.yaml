@@ -12,13 +12,13 @@
 # Update existing app:
 #   doctl apps update YOUR_APP_ID --spec do-app.yaml
 
-name: rsvp-reader
+name: speed-reader
 region: ams  # Amsterdam (change to: nyc, sfo, sgp, lon, fra, blr, syd)
 
 static_sites:
   - name: web
     github:
-      repo: YOUR_GITHUB_USERNAME/RSVP  # UPDATE THIS
+      repo: YOUR_GITHUB_USERNAME/speed-reader  # UPDATE THIS
       branch: main
       deploy_on_push: true
 
@@ -39,5 +39,5 @@ static_sites:
       - path: /
 
 domains:
-  - domain: rsvp.n0name.eu
+  - domain: spid.reader.app
     type: PRIMARY
