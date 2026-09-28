@@ -8,7 +8,8 @@ import {
   formatTimeRemaining,
   splitWordForDisplay,
   shouldPauseAtWord,
-  extractWordFrame
+  extractWordFrame,
+  getDefaultText
 } from '../lib/reading-utils.js'
 
 describe('parseText', () => {
@@ -424,5 +425,34 @@ describe('extractWordFrame', () => {
     const result = extractWordFrame(words, 9, 5)
     expect(result.subset).toEqual(['eight', 'nine', 'ten'])
     expect(result.centerOffset).toBe(2)
+  })
+})
+
+describe('getDefaultText', () => {
+  it('should return the Russian base text for Russian locales', () => {
+    expect(getDefaultText('ru-RU')).toContain('Скорочтение')
+    expect(getDefaultText('ru')).toContain('Скорочтение')
+    expect(getDefaultText('RU')).toContain('Скорочтение')
+    expect(getDefaultText('ru_UA')).toContain('Скорочтение')
+  })
+
+  it('should return the English base text for English and other locales', () => {
+    expect(getDefaultText('en-US')).toContain('Focused reading')
+    expect(getDefaultText('de-DE')).toContain('Focused reading')
+  })
+
+  it('should default to English for a missing locale', () => {
+    expect(getDefaultText()).toContain('Focused reading')
+    expect(getDefaultText(null)).toContain('Focused reading')
+  })
+
+  it('should be a real sentence and not mention rsvp', () => {
+    const russian = getDefaultText('ru-RU')
+    const english = getDefaultText('en-US')
+    expect(russian).not.toMatch(/rsvp/i)
+    expect(english).not.toMatch(/rsvp/i)
+    expect(russian.length).toBeGreaterThan(60)
+    expect(english.length).toBeGreaterThan(60)
+    expect(russian).not.toBe(english)
   })
 })

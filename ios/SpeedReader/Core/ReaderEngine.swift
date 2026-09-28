@@ -6,13 +6,32 @@ import SwiftUI
 @MainActor
 final class ReaderEngine: ObservableObject {
 
-    static let defaultText = """
+    static let englishDefaultText = """
     Focused reading is a skill of attention, not just speed. When words appear one at a time at a fixed point on the screen, your eyes stop scanning and your mind settles into a steady rhythm. Start slower than feels comfortable. Let the red letter anchor your gaze. Trust the rhythm even when it feels fast. Speed is a habit, and habits are built one word at a time.
     """
 
+    static let russianDefaultText = """
+    Скорочтение — это навык внимания, а не просто скорость. Когда слова появляются по одному в одной точке экрана, глаза перестают бегать по строке, и ум входит в ровный ритм. Начинайте медленнее, чем кажется удобно. Пусть красная буква удерживает взгляд. Доверяйтесь ритму, даже когда он кажется быстрым. Скорость — это привычка, а привычки строятся по одному слову за раз.
+    """
+
+    /// Resolves `.system` to the language the UI is actually showing
+    /// (AppleLanguages override, then the device language).
+    static func effectiveLanguage(_ language: AppLanguage) -> AppLanguage {
+        guard language == .system else { return language }
+        // Probe the active UI language with a key whose Russian translation
+        // differs from the English source string.
+        return String(localized: "Play") == "Читать" ? .russian : .english
+    }
+
+    /// The base text shown for a fresh session, localized to the app language
+    /// (`.system` follows the device language). Mirrors web `getDefaultText`.
+    static func defaultText(forLanguage: AppLanguage = .system) -> String {
+        return effectiveLanguage(forLanguage) == .russian ? russianDefaultText : englishDefaultText
+    }
+
     // MARK: - State
 
-    @Published private(set) var sourceText: String = ReaderEngine.defaultText
+    @Published private(set) var sourceText: String = ReaderEngine.defaultText()
     @Published private(set) var words: [String] = []
     /// Next-word pointer; 0 means "before the first word".
     @Published private(set) var currentIndex: Int = 0
@@ -57,7 +76,7 @@ final class ReaderEngine: ObservableObject {
     // MARK: - Loading
 
     init() {
-        load(text: ReaderEngine.defaultText)
+        load(text: ReaderEngine.defaultText())
     }
 
     func load(text: String) {

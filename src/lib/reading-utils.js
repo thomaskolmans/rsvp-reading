@@ -187,3 +187,29 @@ export function extractWordFrame(allWords, centerIdx, frameSize) {
 
   return { subset, centerOffset };
 }
+
+/**
+ * English base text shown for a fresh session (no saved progress yet).
+ * Also matches the iOS app's ReaderEngine.englishDefaultText.
+ */
+export const DEFAULT_TEXT_EN =
+  "Focused reading is a skill of attention, not just speed. When words appear one at a time at a fixed point on the screen, your eyes stop scanning and your mind settles into a steady rhythm. Start slower than feels comfortable. Let the red letter anchor your gaze. Trust the rhythm even when it feels fast. Speed is a habit, and habits are built one word at a time.";
+
+/**
+ * Russian base text shown for a fresh session when the app is in Russian.
+ */
+export const DEFAULT_TEXT_RU =
+  "Скорочтение — это навык внимания, а не просто скорость. Когда слова появляются по одному в одной точке экрана, глаза перестают бегать по строке, и ум входит в ровный ритм. Начинайте медленнее, чем кажется удобно. Пусть красная буква удерживает взгляд. Доверяйтесь ритму, даже когда он кажется быстрым. Скорость — это привычка, а привычки строятся по одному слову за раз.";
+
+/**
+ * Pick the base text for a fresh session by UI locale.
+ * Any Russian locale ("ru", "ru-RU", "ru_UA", "RU") gets the Russian text;
+ * everything else falls back to English.
+ *
+ * @param {string|null} locale - BCP-47/ISO locale tag, e.g. from the browser
+ * @returns {string} The localized default text
+ */
+export function getDefaultText(locale) {
+  const tag = typeof locale === "string" ? locale.toLowerCase() : "";
+  return tag.startsWith("ru") ? DEFAULT_TEXT_RU : DEFAULT_TEXT_EN;
+}

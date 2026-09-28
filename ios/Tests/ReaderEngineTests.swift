@@ -25,7 +25,7 @@ enum EngineTestRunner {
         // MARK: - Loading and derived state
 
         let engine = ReaderEngine()
-        expect("default text has 69 words", engine.words.count, 69)
+        expect("default text is loaded", engine.words.count > 40, true)
         expect("fresh engine can play", engine.canPlay, true)
         expect("fresh index is 0", engine.currentIndex, 0)
         expect("fresh progress is 0", engine.progressPercent, 0)
@@ -33,6 +33,15 @@ enum EngineTestRunner {
         engine.load(text: "alpha beta gamma delta")
         expect("load resets word count", engine.words.count, 4)
         expect("load resets index", engine.currentIndex, 0)
+
+        // MARK: - Localized base text (defaultText follows the app language)
+
+        let ruDefault = ReaderEngine.defaultText(forLanguage: .russian)
+        expect("russian base text first word", ReadingUtils.parseText(ruDefault)[0], "Скорочтение")
+        let enDefault = ReaderEngine.defaultText(forLanguage: .english)
+        expect("english base text first word", ReadingUtils.parseText(enDefault)[0], "Focused")
+        expect("base texts differ by language", ruDefault == enDefault, false)
+        expect("system base text is one of the two", [ruDefault, enDefault].contains(ReaderEngine.defaultText()), true)
 
         // MARK: - Navigation
 

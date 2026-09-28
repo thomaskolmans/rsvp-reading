@@ -18,6 +18,7 @@
     getSessionSummary
   } from './lib/progress-storage.js';
   import WordStage from './lib/components/WordStage.svelte';
+import { getDefaultText } from './lib/reading-utils.js';
   import Controls from './lib/components/Controls.svelte';
   import Settings from './lib/components/Settings.svelte';
   import TextInput from './lib/components/TextInput.svelte';
@@ -25,7 +26,14 @@
 
   // State
   let frameWordCount = 1;
-  let text = `Focused reading is a skill of attention, not just speed. When words appear one at a time at a fixed point on the screen, your eyes stop scanning and your mind settles into a steady rhythm. Start slower than feels comfortable. Let the red letter anchor your gaze. Trust the rhythm even when it feels fast. Speed is a habit, and habits are built one word at a time.`;
+  // Base text for a fresh session follows the UI locale: Russian device/browser
+  // (ru*) gets the Russian text, everything else the English one.
+  // WKWebView exposes navigator.language; elsewhere Intl reflects the locale.
+  const uiLocale =
+    typeof navigator.language === 'string'
+      ? navigator.language
+      : Intl.DateTimeFormat().resolvedOptions().locale;
+  let text = getDefaultText(uiLocale);
   let words = [];
   let currentWordIndex = 0;
   let isPlaying = false;
